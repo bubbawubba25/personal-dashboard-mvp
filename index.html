@@ -3,41 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML Game Portal</title>
+  <title>My Games</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>HTML Game Portal</h1>
-  </header>
+  <h1>My Games</h1>
+  <ul id="game-list"></ul>
 
-  <main>
-    <div class="game-list">
-      <div class="game">
-        <h2>Game 1</h2>
-        <a href="games/game1/index.html" target="_blank">
-          <button>Play</button>
-        </a>
-      </div>
+  <script>
+    fetch("games.json")
+      .then(res => res.json())
+      .then(games => {
+        // Sort alphabetically by name
+        games.sort((a, b) => a.name.localeCompare(b.name));
 
-      <div class="game">
-        <h2>Game 2</h2>
-        <a href="games/game2/index.html" target="_blank">
-          <button>Play</button>
-        </a>
-      </div>
-
-      <div class="game">
-        <h2>Game 3</h2>
-        <a href="games/game3/index.html" target="_blank">
-          <button>Play</button>
-        </a>
-      </div>
-    </div>
-  </main>
-
-  <footer>
-    <p>© 2025 HTML Game Portal</p>
-  </footer>
+        const list = document.getElementById("game-list");
+        games.forEach(game => {
+          const li = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = "Gxmes/" + game.file;
+          link.textContent = game.name;
+          li.appendChild(link);
+          list.appendChild(li);
+        });
+      })
+      .catch(err => console.error("Error loading games:", err));
+  </script>
 </body>
 </html>
