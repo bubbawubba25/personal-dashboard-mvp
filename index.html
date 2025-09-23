@@ -1,33 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Games</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUB</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    margin-top: 40px;
+    font-size: 3rem;
+    color: #333;
+  }
+
+  #search-container {
+    margin: 20px 0;
+  }
+
+  #search-bar {
+    padding: 10px 15px;
+    font-size: 1rem;
+    width: 300px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  #search-bar:focus {
+    border-color: #007bff;
+  }
+
+  #game-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1200px;
+  }
+
+  .game-card {
+    position: relative;
+    width: 200px;
+    height: 120px;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  .game-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s;
+    padding: 5px 0;
+  }
+
+  .game-card:hover .overlay {
+    opacity: 1;
+  }
+</style>
 </head>
 <body>
-  <h1>My Games</h1>
-  <ul id="game-list"></ul>
 
-  <script>
-    fetch("gxmes.json")
-      .then(res => res.json())
-      .then(games => {
-        // Sort alphabetically by name
-        games.sort((a, b) => a.name.localeCompare(b.name));
+<h1>GUB</h1>
 
-        const list = document.getElementById("game-list");
-        games.forEach(game => {
-          const li = document.createElement("li");
-          const link = document.createElement("a");
-          link.href = "Gxmes/" + game.file;
-          link.textContent = game.name;
-          li.appendChild(link);
-          list.appendChild(li);
+<div id="search-container">
+  <input type="text" id="search-bar" placeholder="Search games...">
+</div>
+
+<div id="game-container">
+  <!-- Game cards will be inserted here by JS -->
+</div>
+
+<script>
+  // Load games from gxmes.json
+  fetch('gxmes.json')
+    .then(response => response.json())
+    .then(games => {
+      const container = document.getElementById('game-container');
+
+      games.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.onclick = () => window.location.href = game.file;
+
+        const img = document.createElement('img');
+        img.src = game.thumbnail || 'default.jpg'; // fallback image
+
+        const overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        overlay.innerText = game.name;
+
+        card.appendChild(img);
+        card.appendChild(overlay);
+        container.appendChild(card);
+      });
+
+      // Search functionality
+      const searchBar = document.getElementById('search-bar');
+      searchBar.addEventListener('input', () => {
+        const query = searchBar.value.toLowerCase();
+        document.querySelectorAll('.game-card').forEach((card, i) => {
+          const gameName = games[i].name.toLowerCase();
+          card.style.display = gameName.includes(query) ? 'block' : 'none';
         });
-      })
-      .catch(err => console.error("Error loading games:", err));
-  </script>
+      });
+    })
+    .catch(err => console.error('Error loading games:', err));
+</script>
+
 </body>
 </html>
+
