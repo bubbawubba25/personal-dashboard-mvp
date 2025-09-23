@@ -1,4 +1,4 @@
 [
-  { "name": "Basketball Bros.", "file": "baseball_bros.html", "thumbnail": "baseball_bros.jpg" },
-  { "name": "Battle Simulator", "file": "battle_simulator.html", "thumbnail": "battle_simulator.jpg" }
+  { "name": "Basketball Bros.", "file": "Gxmes/baseball_bros.html", "thumbnail": "thumbnails/baseball_bros.jpg" },
+  { "name": "Battle Simulator", "file": "Gxmes/battle_simulator.html", "thumbnail": "thumbnails/battle_simulator.jpg" }
 ]
