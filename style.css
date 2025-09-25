@@ -11,7 +11,7 @@ body {
 
 /* Logo */
 .site-logo img {
-  max-width: 220px;   /* adjust size as needed */
+  max-width: 400px;   /* adjust size as needed */
   display: block;
   margin: 40px auto 20px auto;
   cursor: pointer;
