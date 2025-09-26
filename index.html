@@ -4,107 +4,173 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GUB</title>
-<link rel="icon" type="image/png" href="logo.PNG"> <!-- Favicon -->
+
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Favicon -->
+<link rel="icon" href="logo.PNG" type="image/png">
+
 <style>
-  body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: #00095E;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+/* General page setup */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: black; /* dark base for emoji rain */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  position: relative;
+  overflow-x: hidden;
+}
 
-  /* Logo Styling */
-  .site-logo img {
-    max-width: 320px; /* adjust size */
-    display: block;
-    margin: 0px auto 0px auto; /* top and bottom spacing */
-  }
+/* Logo */
+.site-logo img {
+  max-width: 220px;
+  display: block;
+  margin: 40px auto 20px auto;
+  cursor: pointer;
+}
 
-  #search-container {
-    margin: 20px -10px;
-  }
+/* Search bar */
+#search-container {
+  margin: 20px 0;
+}
 
-  #search-bar {
-    padding: 10px 15px;
-    font-size: 1rem;
-    width: 300px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
+#search-bar {
+  padding: 10px 15px;
+  font-size: 1rem;
+  width: 300px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
 
-  #search-bar:focus {
-    border-color: #007bff;
-  }
+#search-bar:focus {
+  border-color: #007bff;
+}
 
-  #game-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    max-width: 1200px;
-  }
+/* Game container */
+#game-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  padding: 20px;
+  z-index: 1; /* ensures it’s above the emoji background */
+  position: relative;
+}
 
-  .game-card {
-    position: relative;
-    width: 200px;
-    height: 120px;
-    cursor: pointer;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
+/* Individual game cards */
+.game-card {
+  position: relative;
+  width: 200px;
+  height: 120px;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background: #fff;
+}
 
-  .game-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  }
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
 
-  .game-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+.game-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
-  .overlay {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    background: rgba(0,0,0,0.6);
-    color: #fff;
-    opacity: 0;
-    transition: opacity 0.3s;
-    padding: 5px 0;
-  }
+/* Overlay with game name */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s;
+  padding: 5px 0;
+  font-size: 14px;
+}
 
-  .game-card:hover .overlay {
-    opacity: 1;
+.game-card:hover .overlay {
+  opacity: 1;
+}
+
+/* Emoji Rain Background */
+#emoji-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* behind everything */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.emoji {
+  position: absolute;
+  top: -2em;
+  font-size: 2em;
+  animation: fall linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
   }
+}
 </style>
 </head>
 <body>
+
+<!-- Emoji rain background -->
+<div id="emoji-background"></div>
 
 <!-- Logo -->
 <div class="site-logo">
   <img src="logo.PNG" alt="GUB Logo">
 </div>
 
+<!-- Search bar -->
 <div id="search-container">
   <input type="text" id="search-bar" placeholder="Search games...">
 </div>
 
+<!-- Game container -->
 <div id="game-container">
   <!-- Game cards will be inserted here by JS -->
 </div>
 
 <script>
+  // Emoji rain
+  const emojiContainer = document.getElementById("emoji-background");
+  function createEmoji() {
+    const emoji = document.createElement("div");
+    emoji.classList.add("emoji");
+    emoji.innerText = "🎮"; // controller emoji
+    emoji.style.left = Math.random() * 100 + "vw";
+    emoji.style.animationDuration = (Math.random() * 3 + 2) + "s"; // random speed
+    emojiContainer.appendChild(emoji);
+
+    setTimeout(() => {
+      emoji.remove();
+    }, 5000);
+  }
+  setInterval(createEmoji, 300);
+
   // Load games from gxmes.json
   fetch('gxmes.json')
     .then(response => response.json())
