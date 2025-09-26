@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GUB</title>
+<title>🅶🆄🅱 - Browser Games</title>
 
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -133,6 +133,18 @@ body {
   }
 }
 </style>
+
+<!-- Rotating Title Script -->
+<script>
+  const titles = ["🅶🆄🅱", "FUN", "GXMES"];
+  let index = 0;
+
+  setInterval(() => {
+    document.title = titles[index];
+    index = (index + 1) % titles.length;
+  }, 2000);
+</script>
+
 </head>
 <body>
 
