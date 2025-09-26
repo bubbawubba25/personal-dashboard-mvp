@@ -13,5 +13,10 @@
         "name": "Pokémon Emerald",
         "file": "Gxmes/pokemon_emerald.html",
         "thumbnail": "thumbnails/pokemon_emerald.jpg"
+    },
+    {
+        "name": "Rooftop Snipers",
+        "file": "Gxmes/rooftop_snipers.html",
+        "thumbnail": "thumbnails/rooftop_snipers.jpg"
     }
 ]
