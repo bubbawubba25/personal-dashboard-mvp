@@ -23,5 +23,10 @@
         "name": "Slope",
         "file": "Gxmes/slope.html",
         "thumbnail": "thumbnails/slope.jpg"
+    },
+    {
+        "name": "BitLife",
+        "file": "Gxmes/bitlife.html",
+        "thumbnail": "thumbnails/bitlife.jpg"
     }
 ]
