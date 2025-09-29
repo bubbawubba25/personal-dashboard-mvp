@@ -28,5 +28,10 @@
         "name": "BitLife",
         "file": "Gxmes/bitlife.html",
         "thumbnail": "thumbnails/bitlife.jpg"
+    },
+    {
+        "name": "Cookie Clicker",
+        "file": "Gxmes/cookie_clicker.html",
+        "thumbnail": "thumbnails/cookie_clicker.jpg"
     }
 ]
