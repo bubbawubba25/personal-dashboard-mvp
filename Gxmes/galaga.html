@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Galaga NES - Play Online</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+    }
+    canvas {
+      image-rendering: pixelated; /* keeps NES pixels sharp */
+      margin-top: 20px;
+      border: 3px solid #fff;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Galaga NES</h1>
+<canvas id="nes-screen" width="256" height="240"></canvas>
+
+<script src="https://unpkg.com/jsnes/dist/jsnes.min.js"></script>
+<script>
+  // URL of your NES ROM
+  const romUrl = 'https://cdn.jsdelivr.net/gh/JoshMerlino/shsg-pfile/games/galaga.nes';
+
+  // Create NES instance
+  const nes = new jsnes.NES({
+    onFrame: function(frameBuffer) {
+      const canvas = document.getElementById('nes-screen');
+      const ctx = canvas.getContext('2d');
+      const imageData = ctx.createImageData(256, 240);
+
+      // frameBuffer contains RGBA pixels
+      for (let i = 0; i < frameBuffer.length; i++) {
+        imageData.data[i] = frameBuffer[i];
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+    },
+    onAudioSample: function(left, right) {
+      // Audio can be added later if desired
+    }
+  });
+
+  // Fetch and load the ROM
+  fetch(romUrl)
+    .then(response => response.arrayBuffer())
+    .then(buffer => {
+      nes.loadROM(new Uint8Array(buffer));
+      requestAnimationFrame(frame);
+    })
+    .catch(err => console.error('Failed to load ROM:', err));
+
+  // Emulator loop
+  function frame() {
+    nes.frame();
+    requestAnimationFrame(frame);
+  }
+
+  // Key mappings
+  const KEY_MAP = {
+    ArrowUp: jsnes.Controller.BUTTON_UP,
+    ArrowDown: jsnes.Controller.BUTTON_DOWN,
+    ArrowLeft: jsnes.Controller.BUTTON_LEFT,
+    ArrowRight: jsnes.Controller.BUTTON_RIGHT,
+    KeyZ: jsnes.Controller.BUTTON_A,
+    KeyX: jsnes.Controller.BUTTON_B,
+    Enter: jsnes.Controller.BUTTON_START,
+    ShiftRight: jsnes.Controller.BUTTON_SELECT
+  };
+
+  document.addEventListener('keydown', e => {
+    const btn = KEY_MAP[e.code];
+    if (btn !== undefined) nes.buttonDown(1, btn);
+  });
+
+  document.addEventListener('keyup', e => {
+    const btn = KEY_MAP[e.code];
+    if (btn !== undefined) nes.buttonUp(1, btn);
+  });
+</script>
+
+</body>
+</html>
