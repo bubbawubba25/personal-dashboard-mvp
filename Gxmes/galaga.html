@@ -5,89 +5,56 @@
   <title>Galaga NES - Play Online</title>
   <style>
     body {
+      overflow: hidden;
+      background: #000;
+      margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #000;
+      height: 100vh;
       color: #fff;
       font-family: sans-serif;
-      margin: 0;
-      height: 100vh;
     }
-    canvas {
-      image-rendering: pixelated; /* keep NES pixels sharp */
-      border: 3px solid #fff;
+
+    #game {
+      width: 100%;
+      max-width: 640px; /* optional scaling */
+      height: 480px;    /* optional scaling */
     }
+
     h1 {
-      margin-top: 20px;
       text-align: center;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
 
 <h1>Galaga NES</h1>
-<canvas id="nes-screen" width="256" height="240"></canvas>
+<div id="game"></div>
 
-<script src="https://unpkg.com/jsnes/dist/jsnes.min.js"></script>
 <script>
-  // URL of your NES ROM
-  const romUrl = 'games/galaga.nes'; // update path if hosted elsewhere
+  window.addEventListener('load', () => {
+    // Show game container
+    document.getElementById("game").style.display = "block";
 
-  // Create NES instance
-  const nes = new jsnes.NES({
-    onFrame: function(frameBuffer) {
-      const canvas = document.getElementById('nes-screen');
-      const ctx = canvas.getContext('2d');
-      const imageData = ctx.createImageData(256, 240);
+    // EmulatorJS configuration
+    EJS_player = "#game";
+    EJS_core = "nes";
+    EJS_color = "#000000";
+    EJS_startOnLoaded = true;
+    EJS_pathtodata = "https://cdn.jsdelivr.net/gh/a456pur/seraph@81f551ca0aa8e3d6018d32d8ac5904ac9bc78f76/storage/emulatorjs/data";
+    EJS_gameUrl = "https://cdn.jsdelivr.net/gh/bubbls/UGS-file-encryption@0b69ab72fb14b1eefde423a8d7f184016b84dbbc/Galaga%20(Europe).zip";
 
-      // Copy frame buffer to imageData
-      for (let i = 0; i < frameBuffer.length; i++) {
-        imageData.data[i] = frameBuffer[i];
-      }
-      ctx.putImageData(imageData, 0, 0);
-    },
-    onAudioSample: function(left, right) {
-      // Optional: add audio handling
-    }
-  });
+    // Load EmulatorJS scripts dynamically
+    var loader = document.createElement("script");
+    loader.src = "https://cdn.jsdelivr.net/gh/a456pur/seraph@81f551ca0aa8e3d6018d32d8ac5904ac9bc78f76/storage/emulatorjs/data/loader.js";
+    document.body.appendChild(loader);
 
-  // Automatically fetch and load the ROM on page load
-  fetch(romUrl)
-    .then(response => response.arrayBuffer())
-    .then(buffer => {
-      nes.loadROM(new Uint8Array(buffer));
-      requestAnimationFrame(frame);
-    })
-    .catch(err => console.error('Failed to load ROM:', err));
-
-  // Emulator loop
-  function frame() {
-    nes.frame();
-    requestAnimationFrame(frame);
-  }
-
-  // Keyboard controls
-  const KEY_MAP = {
-    ArrowUp: jsnes.Controller.BUTTON_UP,
-    ArrowDown: jsnes.Controller.BUTTON_DOWN,
-    ArrowLeft: jsnes.Controller.BUTTON_LEFT,
-    ArrowRight: jsnes.Controller.BUTTON_RIGHT,
-    KeyZ: jsnes.Controller.BUTTON_A,
-    KeyX: jsnes.Controller.BUTTON_B,
-    Enter: jsnes.Controller.BUTTON_START,
-    ShiftRight: jsnes.Controller.BUTTON_SELECT
-  };
-
-  document.addEventListener('keydown', e => {
-    const btn = KEY_MAP[e.code];
-    if (btn !== undefined) nes.buttonDown(1, btn);
-  });
-
-  document.addEventListener('keyup', e => {
-    const btn = KEY_MAP[e.code];
-    if (btn !== undefined) nes.buttonUp(1, btn);
+    var cloak = document.createElement("script");
+    cloak.src = "https://cdn.jsdelivr.net/gh/a456pur/seraph@ae2fcc6d6a9cd051654fcc0519080db1f79cf2a7/storage/js/cloak.js";
+    document.body.appendChild(cloak);
   });
 </script>
 
