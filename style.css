@@ -48,6 +48,19 @@ body {
   height: 70%;
   object-fit: cover;
 }
+/* Overlay with game name */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s;
+  padding: 5px 0;
+  font-size: 14px;
+}
 .featured-card h3 {
   margin: 8px 0;
 }
