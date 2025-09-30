@@ -39,5 +39,10 @@
         "name": "Time Shooter 2",
         "file": "Gxmes/time_shooter_2.html",
         "thumbnail": "thumbnails/time_shooter_2.jpg"
+    },
+    {
+        "name": "Getaway Shootout",
+        "file": "Gxmes/getaway_shootout.html",
+        "thumbnail": "thumbnails/getaway_shootout.jpg"
     }
 ]
