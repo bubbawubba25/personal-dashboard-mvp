@@ -44,5 +44,10 @@
         "name": "Getaway Shootout",
         "file": "Gxmes/getaway_shootout.html",
         "thumbnail": "thumbnails/getaway_shootout.jpg"
+    },
+    {
+        "name": "Mr.Mine",
+        "file": "Gxmes/mr_mine.html",
+        "thumbnail": "thumbnails/mr_mine.jpg"
     }
 ]
