@@ -275,7 +275,6 @@ body {
         gameOfDayDiv.innerHTML = `
           <img src="${gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${gameOfDay.name}">
           <h2>⭐Game of the Day⭐<h2>
-          <h3>${gameOfDay.name}</h3>
         `;
         gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
 
@@ -286,7 +285,6 @@ body {
           favoriteDiv.innerHTML = `
             <img src="${favorite.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${favorite.name}">
             <h2>❤️Owners Favorite❤️<h2>
-            <h3>${favorite.name}</h3>
           `;
           favoriteDiv.onclick = () => window.location.href = favorite.file;
         }
