@@ -2,54 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Pokemon Emerald GBA - Play Online</title>
+  <title>Pokemon Emerald - Fullscreen</title>
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
       overflow: hidden;
       background: #000;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      color: #fff;
-      font-family: sans-serif;
     }
-
     #game {
-      width: 100%;
-      max-width: 640px; /* optional scaling */
-      height: 480px;    /* optional scaling */
+      width: 100vw;
+      height: 100vh;
     }
-
-    h1 {
-      text-align: center;
-      margin: 10px 0;
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      image-rendering: pixelated;
+      display: block;
     }
   </style>
 </head>
 <body>
+  <div id="game"></div>
 
-<h1>Pokemon Emerald GBA</h1>
-<div id="game"></div>
-
-<script>
-  // Automatically start the game on page load
-  window.addEventListener('load', () => {
-    EJS_player = "#game";               // div to render the emulator
-    EJS_core = "gba";                   // GBA emulator
-    EJS_color = "#000000";              // background color
-    EJS_startOnLoaded = true;           // auto-start
+  <script>
+    // Automatically start the GBA game in the #game div
+    EJS_player = "#game";
+    EJS_core = "gba";
+    EJS_color = "#000000";
+    EJS_startOnLoaded = true;
     EJS_pathtodata = "https://cdn.jsdelivr.net/gh/a456pur/seraph@81f551ca0aa8e3d6018d32d8ac5904ac9bc78f76/storage/emulatorjs/data";
     EJS_gameUrl = "https://cdn.jsdelivr.net/gh/a456pur/seraph@81f551ca0aa8e3d6018d32d8ac5904ac9bc78f76/games/pokemonemerald/pokemonemerald.gba";
 
-    // Dynamically load EmulatorJS loader script
-    var loader = document.createElement("script");
-    loader.src = "https://cdn.jsdelivr.net/gh/a456pur/seraph@81f551ca0aa8e3d6018d32d8ac5904ac9bc78f76/storage/emulatorjs/data/loader.js";
-    document.body.appendChild(loader);
-  });
-</script>
-
+    // Load EmulatorJS
+    var script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/gh/a456pur/seraph@81f551ca0aa8e3d6018d32d8ac5904ac9bc78f76/storage/emulatorjs/data/loader.js";
+    document.body.appendChild(script);
+  </script>
 </body>
 </html>
