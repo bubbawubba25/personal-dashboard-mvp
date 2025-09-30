@@ -18,7 +18,8 @@
     {
         "name": "Rooftop Snipers",
         "file": "Gxmes/rooftop_snipers.html",
-        "thumbnail": "thumbnails/rooftop_snipers.jpg"
+        "thumbnail": "thumbnails/rooftop_snipers.jpg", 
+        "favorite": true
     },
     {
         "name": "Slope",
