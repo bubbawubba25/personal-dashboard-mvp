@@ -33,6 +33,47 @@ body {
   cursor: pointer;
 }
 
+/* Featured Section */
+#featured-section {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px 0 40px 0;
+  flex-wrap: wrap;
+}
+
+.featured-card {
+  width: 280px;
+  height: 280px;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.3s;
+  color: #000;
+}
+.featured-card:hover {
+  transform: scale(1.05);
+}
+.featured-card img {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+}
+.featured-card h3 {
+  margin: 8px 0;
+}
+.featured-card button {
+  padding: 6px 14px;
+  background: #132c61;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 /* Search bar */
 #search-container {
   margin: 20px 0;
@@ -156,6 +197,12 @@ body {
   <img src="logo.PNG" alt="GUB Logo">
 </div>
 
+<!-- Featured Games Section -->
+<div id="featured-section">
+  <div id="game-of-day" class="featured-card"></div>
+  <div id="owners-favorite" class="featured-card"></div>
+</div>
+
 <!-- Search bar -->
 <div id="search-container">
   <input type="text" id="search-bar" placeholder="Search games...">
@@ -215,6 +262,37 @@ body {
           card.style.display = gameName.includes(query) ? 'block' : 'none';
         });
       });
+
+      // --- Featured Games ---
+      function setFeaturedGames(games) {
+        // Pick Game of the Day
+        const today = new Date();
+        const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+        const index = Math.abs(seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0)) % games.length;
+        const gameOfDay = games[index];
+
+        const gameOfDayDiv = document.getElementById("game-of-day");
+        gameOfDayDiv.innerHTML = `
+          <img src="${gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${gameOfDay.name}">
+          <h3>⭐ ${gameOfDay.name}</h3>
+          <button>Play Now</button>
+        `;
+        gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
+
+        // Pick Owner's Favorite (games.json needs "favorite": true on one game)
+        const favorite = games.find(g => g.favorite);
+        if (favorite) {
+          const favoriteDiv = document.getElementById("owners-favorite");
+          favoriteDiv.innerHTML = `
+            <img src="${favorite.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${favorite.name}">
+            <h3>❤️ ${favorite.name}</h3>
+            <button>Play Now</button>
+          `;
+          favoriteDiv.onclick = () => window.location.href = favorite.file;
+        }
+      }
+
+      setFeaturedGames(games);
     })
     .catch(err => console.error('Error loading games:', err));
 </script>
