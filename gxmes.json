@@ -46,8 +46,8 @@
         "thumbnail": "thumbnails/getaway_shootout.jpg"
     },
     {
-        "name": "Mr.Mine",
-        "file": "Gxmes/mr_mine.html",
-        "thumbnail": "thumbnails/mr_mine.jpg"
+        "name": "Galaga",
+        "file": "Gxmes/galaga.html",
+        "thumbnail": "thumbnails/galaga.jpg"
     }
 ]
