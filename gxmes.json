@@ -1,3 +1,4 @@
+
 [
     {
         "name": "Basketball Bros.",
@@ -33,5 +34,10 @@
         "name": "Cookie Clicker",
         "file": "Gxmes/cookie_clicker.html",
         "thumbnail": "thumbnails/cookie_clicker.jpg"
+    },
+    {
+        "name": "Time Shooter 2",
+        "file": "Gxmes/time_shooter_2.html",
+        "thumbnail": "thumbnails/time_shooter_2.jpg"
     }
 ]
