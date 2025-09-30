@@ -274,8 +274,8 @@ body {
         const gameOfDayDiv = document.getElementById("game-of-day");
         gameOfDayDiv.innerHTML = `
           <img src="${gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${gameOfDay.name}">
-          <h3>⭐Game of the Day⭐
-          ${gameOfDay.name}</h3>
+          <h3>⭐Game of the Day⭐<h3>
+          <h4>${gameOfDay.name}</h4>
         `;
         gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
 
@@ -285,8 +285,8 @@ body {
           const favoriteDiv = document.getElementById("owners-favorite");
           favoriteDiv.innerHTML = `
             <img src="${favorite.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${favorite.name}">
-            <h3>❤️Owners Favorite❤️
-            ${favorite.name}</h3>
+            <h3>❤️Owners Favorite❤️<h3>
+            <h4>${favorite.name}</h4>
           `;
           favoriteDiv.onclick = () => window.location.href = favorite.file;
         }
