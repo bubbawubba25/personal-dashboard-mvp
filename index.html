@@ -11,7 +11,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-4J4WLYMHLS');
 </script>
 
@@ -26,7 +25,7 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: #132c61; /* dark base for emoji rain */
+  background: #132c61;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,7 +110,7 @@ body {
   gap: 20px;
   max-width: 1200px;
   padding: 20px;
-  z-index: 1; /* ensures it’s above the emoji background */
+  z-index: 1;
   position: relative;
 }
 
@@ -165,7 +164,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* behind everything */
+  z-index: -1;
   pointer-events: none;
   overflow: hidden;
 }
@@ -189,7 +188,6 @@ body {
 <script>
   const titles = ["🅶🆄🅱","FREE", "FUN", "G@MES"];
   let index = 0;
-
   setInterval(() => {
     document.title = titles[index];
     index = (index + 1) % titles.length;
@@ -219,9 +217,7 @@ body {
 </div>
 
 <!-- Game container -->
-<div id="game-container">
-  <!-- Game cards will be inserted here by JS -->
-</div>
+<div id="game-container"></div>
 
 <script>
   // Emoji rain
@@ -229,14 +225,11 @@ body {
   function createEmoji() {
     const emoji = document.createElement("div");
     emoji.classList.add("emoji");
-    emoji.innerText = "🎮"; // controller emoji
+    emoji.innerText = "🎮";
     emoji.style.left = Math.random() * 100 + "vw";
-    emoji.style.animationDuration = (Math.random() * 3 + 2) + "s"; // random speed
+    emoji.style.animationDuration = (Math.random() * 3 + 2) + "s";
     emojiContainer.appendChild(emoji);
-
-    setTimeout(() => {
-      emoji.remove();
-    }, 5000);
+    setTimeout(() => emoji.remove(), 5000);
   }
   setInterval(createEmoji, 300);
 
@@ -249,10 +242,19 @@ body {
       games.forEach(game => {
         const card = document.createElement('div');
         card.className = 'game-card';
-        card.onclick = () => window.location.href = game.file;
+
+        // Track click + open game
+        card.onclick = () => {
+          gtag('event', 'game_click', {
+            'event_category': 'Games',
+            'event_label': game.name,
+            'value': 1
+          });
+          window.location.href = game.file;
+        };
 
         const img = document.createElement('img');
-        img.src = game.thumbnail || 'thumbnails/thumbnail_default.jpg'; // fallback image
+        img.src = game.thumbnail || 'thumbnails/thumbnail_default.jpg';
 
         const overlay = document.createElement('div');
         overlay.className = 'overlay';
@@ -263,7 +265,7 @@ body {
         container.appendChild(card);
       });
 
-      // Search functionality
+      // Search bar
       const searchBar = document.getElementById('search-bar');
       searchBar.addEventListener('input', () => {
         const query = searchBar.value.toLowerCase();
@@ -273,9 +275,8 @@ body {
         });
       });
 
-      // --- Featured Games ---
+      // Featured Section
       function setFeaturedGames(games) {
-        // Pick Game of the Day
         const today = new Date();
         const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
         const index = Math.abs(seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0)) % games.length;
@@ -284,22 +285,20 @@ body {
         const gameOfDayDiv = document.getElementById("game-of-day");
         gameOfDayDiv.innerHTML = `
           <img src="${gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${gameOfDay.name}">
-          <h2>⭐Game of the Day⭐<h2>
+          <h2>⭐Game of the Day⭐</h2>
         `;
         gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
 
-        // Pick Owner's Favorite (games.json needs "favorite": true on one game)
         const favorite = games.find(g => g.favorite);
         if (favorite) {
           const favoriteDiv = document.getElementById("owners-favorite");
           favoriteDiv.innerHTML = `
             <img src="${favorite.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${favorite.name}">
-            <h2>❤️Owners Favorite❤️<h2>
+            <h2>❤️Owners Favorite❤️</h2>
           `;
           favoriteDiv.onclick = () => window.location.href = favorite.file;
         }
       }
-
       setFeaturedGames(games);
     })
     .catch(err => console.error('Error loading games:', err));
