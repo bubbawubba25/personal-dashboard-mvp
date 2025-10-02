@@ -28,49 +28,48 @@ body {
   flex-wrap: wrap;
 }
 
+/* Featured Cards (same as game-card, just bigger) */
 .featured-card {
-  width: 280px;
-  height: 280px;
-  border-radius: 15px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: relative;
+  width: 280px;   /* bigger than normal game cards */
+  height: 160px;
   cursor: pointer;
-  text-align: center;
-  transition: transform 0.3s;
-  color: #000;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background: #fff;
 }
+
 .featured-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
+
 .featured-card img {
   width: 100%;
-  height: 70%;
+  height: 100%;
   object-fit: cover;
+  display: block;
 }
-/* Overlay with game name */
-.overlay {
+
+/* Overlay with featured game name */
+.featured-card h2 {
   position: absolute;
   bottom: 0;
   width: 100%;
   text-align: center;
   background: rgba(0,0,0,0.6);
   color: #fff;
+  margin: 0;
+  font-size: 16px;
+  padding: 5px 0;
   opacity: 0;
   transition: opacity 0.3s;
-  padding: 5px 0;
-  font-size: 14px;
 }
-.featured-card h3 {
-  margin: 8px 0;
-}
-.featured-card button {
-  padding: 6px 14px;
-  background: #132c61;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+
+.featured-card:hover h2 {
+  opacity: 1;
 }
 
 /* Search bar */
