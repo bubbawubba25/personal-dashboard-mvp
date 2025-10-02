@@ -32,7 +32,7 @@ body {
   color: #fff;
   position: relative;
   overflow-x: hidden;
-  padding-top: 70px; /* space for navbar */
+  padding-top: 70px; /* space for fixed navbar */
 }
 
 /* Navigation Bar */
@@ -74,20 +74,10 @@ body {
   color: #00bfff;
 }
 
-.nav-logo {
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-  cursor: pointer;
-}
-
-/* Logo */
-.site-logo img {
-  max-width: 280px;
+.nav-logo img {
+  height: 50px;
   display: block;
-  margin: 20px auto;
-  cursor: pointer;
+  margin: 0 auto;
 }
 
 /* Featured Section */
@@ -99,22 +89,22 @@ body {
   flex-wrap: wrap;
 }
 
-/* Featured cards */
+/* Featured Cards (bigger than normal game cards) */
 .featured-card {
   position: relative;
-  width: 250px;
-  height: 150px;
+  width: 280px;
+  height: 160px;
   cursor: pointer;
   overflow: hidden;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   background: #fff;
 }
 
 .featured-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 
 .featured-card img {
@@ -124,7 +114,7 @@ body {
   display: block;
 }
 
-/* Overlay with game name */
+/* Overlay with featured game name inside card */
 .overlay {
   position: absolute;
   bottom: 0;
@@ -143,12 +133,14 @@ body {
   opacity: 1;
 }
 
-/* Headings under featured cards */
-.featured-heading {
-  text-align: center;
+/* Heading under each featured card */
+.featured-card-heading {
   margin-top: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
   color: #fff;
-  font-size: 16px;
+  width: 100%;
 }
 
 /* Search bar */
@@ -250,13 +242,15 @@ body {
 <!-- Navigation Bar -->
 <nav class="navbar">
   <ul class="nav-left">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="#featured-section">Featured</a></li>
+    <li><a href="#">Home</a></li>
   </ul>
-  <div class="nav-logo">🅶🆄🅱</div>
+
+  <div class="nav-logo">
+    <img src="logo.PNG" alt="GUB Logo">
+  </div>
+
   <ul class="nav-right">
-    <li><a href="#game-container">Games</a></li>
-    <li><a href="#">About</a></li>
+    <!-- Empty for now -->
   </ul>
 </nav>
 
@@ -267,11 +261,11 @@ body {
 <div id="featured-section">
   <div>
     <div id="game-of-day" class="featured-card"></div>
-    <div class="featured-heading">⭐ Game of the Day ⭐</div>
+    <h2 class="featured-card-heading">⭐ Game of the Day ⭐</h2>
   </div>
   <div>
     <div id="owners-favorite" class="featured-card"></div>
-    <div class="featured-heading">👍 Owner's Favorite 👍</div>
+    <h2 class="featured-card-heading">👍 Owner's Favorite 👍</h2>
   </div>
 </div>
 
@@ -337,7 +331,7 @@ fetch('gxmes.json')
       });
     });
 
-    // Featured Section
+    // Featured Section as big normal cards
     const setFeaturedGames = (games) => {
       const today = new Date();
       const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
