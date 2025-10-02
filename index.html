@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🅶🆄🅱</title>
 
-  <!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4J4WLYMHLS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -38,7 +38,7 @@ body {
 .site-logo img {
   max-width: 280px;
   display: block;
-  margin: 20px auto 20px auto;
+  margin: 20px auto;
   cursor: pointer;
 }
 
@@ -51,36 +51,48 @@ body {
   flex-wrap: wrap;
 }
 
+/* Featured cards now use normal game card style but bigger */
 .featured-card {
-  width: 280px;
-  height: 280px;
-  border-radius: 15px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: relative;
+  width: 250px;      /* slightly bigger */
+  height: 150px;
   cursor: pointer;
-  text-align: center;
-  transition: transform 0.3s;
-  color: #000;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background: #fff;
 }
+
 .featured-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
+
 .featured-card img {
   width: 100%;
-  height: 70%;
+  height: 100%;
   object-fit: cover;
+  display: block;
 }
-.featured-card h3 {
-  margin: 8px 0;
-}
-.featured-card button {
-  padding: 6px 14px;
-  background: #132c61;
+
+/* Overlay with game name */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(0,0,0,0.6);
   color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+  padding: 5px 0;
+  font-size: 14px;
+}
+
+.featured-card:hover .overlay,
+.game-card:hover .overlay {
+  opacity: 1;
 }
 
 /* Search bar */
@@ -137,24 +149,6 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-/* Overlay with game name */
-.overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s;
-  padding: 5px 0;
-  font-size: 14px;
-}
-
-.game-card:hover .overlay {
-  opacity: 1;
 }
 
 /* Emoji Rain Background */
@@ -220,88 +214,95 @@ body {
 <div id="game-container"></div>
 
 <script>
-  // Emoji rain
-  const emojiContainer = document.getElementById("emoji-background");
-  function createEmoji() {
-    const emoji = document.createElement("div");
-    emoji.classList.add("emoji");
-    emoji.innerText = "🎮";
-    emoji.style.left = Math.random() * 100 + "vw";
-    emoji.style.animationDuration = (Math.random() * 3 + 2) + "s";
-    emojiContainer.appendChild(emoji);
-    setTimeout(() => emoji.remove(), 5000);
-  }
-  setInterval(createEmoji, 300);
+// Emoji rain
+const emojiContainer = document.getElementById("emoji-background");
+function createEmoji() {
+  const emoji = document.createElement("div");
+  emoji.classList.add("emoji");
+  emoji.innerText = "🎮";
+  emoji.style.left = Math.random() * 100 + "vw";
+  emoji.style.animationDuration = (Math.random() * 3 + 2) + "s";
+  emojiContainer.appendChild(emoji);
+  setTimeout(() => emoji.remove(), 5000);
+}
+setInterval(createEmoji, 300);
 
-  // Load games from gxmes.json
-  fetch('gxmes.json')
-    .then(response => response.json())
-    .then(games => {
-      const container = document.getElementById('game-container');
+// Load games from gxmes.json
+fetch('gxmes.json')
+  .then(response => response.json())
+  .then(games => {
+    const container = document.getElementById('game-container');
 
-      games.forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
-
-        // Track click + open game
-        card.onclick = () => {
-          gtag('event', 'game_click', {
-            'event_category': 'Games',
-            'event_label': game.name,
-            'value': 1
-          });
-          window.location.href = game.file;
-        };
-
-        const img = document.createElement('img');
-        img.src = game.thumbnail || 'thumbnails/thumbnail_default.jpg';
-
-        const overlay = document.createElement('div');
-        overlay.className = 'overlay';
-        overlay.innerText = game.name;
-
-        card.appendChild(img);
-        card.appendChild(overlay);
-        container.appendChild(card);
-      });
-
-      // Search bar
-      const searchBar = document.getElementById('search-bar');
-      searchBar.addEventListener('input', () => {
-        const query = searchBar.value.toLowerCase();
-        document.querySelectorAll('.game-card').forEach((card, i) => {
-          const gameName = games[i].name.toLowerCase();
-          card.style.display = gameName.includes(query) ? 'block' : 'none';
+    games.forEach(game => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.onclick = () => {
+        gtag('event', 'game_click', {
+          'event_category': 'Games',
+          'event_label': game.name,
+          'value': 1
         });
+        window.location.href = game.file;
+      };
+
+      const img = document.createElement('img');
+      img.src = game.thumbnail || 'thumbnails/thumbnail_default.jpg';
+
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
+      overlay.innerText = game.name;
+
+      card.appendChild(img);
+      card.appendChild(overlay);
+      container.appendChild(card);
+    });
+
+    // Search bar
+    const searchBar = document.getElementById('search-bar');
+    searchBar.addEventListener('input', () => {
+      const query = searchBar.value.toLowerCase();
+      document.querySelectorAll('.game-card').forEach((card, i) => {
+        const gameName = games[i].name.toLowerCase();
+        card.style.display = gameName.includes(query) ? 'block' : 'none';
       });
+    });
 
-      // Featured Section
-      function setFeaturedGames(games) {
-        const today = new Date();
-        const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-        const index = Math.abs(seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0)) % games.length;
-        const gameOfDay = games[index];
+    // Featured Section as big normal cards
+    const setFeaturedGames = (games) => {
+      const today = new Date();
+      const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      const index = Math.abs(seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0)) % games.length;
+      const gameOfDay = games[index];
 
-        const gameOfDayDiv = document.getElementById("game-of-day");
-        gameOfDayDiv.innerHTML = `
-          <img src="${gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${gameOfDay.name}">
-          <h2>⭐Game of the Day⭐</h2>
-        `;
-        gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
+      const gameOfDayDiv = document.getElementById("game-of-day");
+      gameOfDayDiv.innerHTML = "";
+      const gdImg = document.createElement("img");
+      gdImg.src = gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg';
+      const gdOverlay = document.createElement("div");
+      gdOverlay.className = "overlay";
+      gdOverlay.innerText = gameOfDay.name;
+      gameOfDayDiv.appendChild(gdImg);
+      gameOfDayDiv.appendChild(gdOverlay);
+      gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
 
-        const favorite = games.find(g => g.favorite);
-        if (favorite) {
-          const favoriteDiv = document.getElementById("owners-favorite");
-          favoriteDiv.innerHTML = `
-            <img src="${favorite.thumbnail || 'thumbnails/thumbnail_default.jpg'}" alt="${favorite.name}">
-            <h2>❤️Owners Favorite❤️</h2>
-          `;
-          favoriteDiv.onclick = () => window.location.href = favorite.file;
-        }
+      const favorite = games.find(g => g.favorite);
+      if (favorite) {
+        const favoriteDiv = document.getElementById("owners-favorite");
+        favoriteDiv.innerHTML = "";
+        const favImg = document.createElement("img");
+        favImg.src = favorite.thumbnail || 'thumbnails/thumbnail_default.jpg';
+        const favOverlay = document.createElement("div");
+        favOverlay.className = "overlay";
+        favOverlay.innerText = favorite.name;
+        favoriteDiv.appendChild(favImg);
+        favoriteDiv.appendChild(favOverlay);
+        favoriteDiv.onclick = () => window.location.href = favorite.file;
       }
-      setFeaturedGames(games);
-    })
-    .catch(err => console.error('Error loading games:', err));
+    };
+
+    setFeaturedGames(games);
+  })
+  .catch(err => console.error('Error loading games:', err));
 </script>
 
 </body>
