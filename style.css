@@ -9,7 +9,7 @@ body {
   color: #fff;
   position: relative;
   overflow-x: hidden;
-  padding-top: 70px; /* space for navbar */
+  padding-top: 70px; /* space for fixed navbar */
 }
 
 /* Navigation Bar */
@@ -19,7 +19,7 @@ body {
   left: 0;
   width: 100%;
   height: 60px;
-  background: #0d1e3a;
+  background: rgba(13, 30, 58, 0.95); /* slight transparency */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -51,20 +51,10 @@ body {
   color: #00bfff;
 }
 
-.nav-logo {
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-  cursor: pointer;
-}
-
-/* Logo */
-.site-logo img {
-  max-width: 280px;   /* smaller for better balance */
+.nav-logo img {
+  height: 50px;
   display: block;
-  margin: 20px auto 20px auto;
-  cursor: pointer;
+  margin: 0 auto;
 }
 
 /* Featured Section */
@@ -76,22 +66,22 @@ body {
   flex-wrap: wrap;
 }
 
-/* Featured Cards (same as game-card, just bigger) */
+/* Featured Cards */
 .featured-card {
   position: relative;
-  width: 280px;   /* bigger than normal game cards */
+  width: 280px; /* bigger than normal game cards */
   height: 160px;
   cursor: pointer;
   overflow: hidden;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: transform 0.3s, box-shadow 0.3s;
   background: #fff;
 }
 
 .featured-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
 
 .featured-card img {
@@ -102,21 +92,21 @@ body {
 }
 
 /* Overlay with featured game name inside card */
-.featured-card h2 {
+.overlay {
   position: absolute;
   bottom: 0;
   width: 100%;
   text-align: center;
   background: rgba(0,0,0,0.6);
   color: #fff;
-  margin: 0;
-  font-size: 16px;
-  padding: 5px 0;
   opacity: 0;
   transition: opacity 0.3s;
+  padding: 5px 0;
+  font-size: 14px;
 }
 
-.featured-card:hover h2 {
+.featured-card:hover .overlay,
+.game-card:hover .overlay {
   opacity: 1;
 }
 
@@ -126,7 +116,7 @@ body {
   font-size: 18px;
   font-weight: 600;
   text-align: center;
-  color: #fff; /* can adjust color if needed */
+  color: #fff;
   width: 100%;
 }
 
@@ -184,24 +174,6 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-/* Overlay with game name */
-.overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s;
-  padding: 5px 0;
-  font-size: 14px;
-}
-
-.game-card:hover .overlay {
-  opacity: 1;
 }
 
 /* Emoji Rain Background */
