@@ -53,7 +53,7 @@ body {
   display: block;
 }
 
-/* Overlay with featured game name */
+/* Overlay with featured game name inside card */
 .featured-card h2 {
   position: absolute;
   bottom: 0;
@@ -70,6 +70,16 @@ body {
 
 .featured-card:hover h2 {
   opacity: 1;
+}
+
+/* Heading under each featured card */
+.featured-card-heading {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  color: #fff; /* can adjust color if needed */
+  width: 100%;
 }
 
 /* Search bar */
