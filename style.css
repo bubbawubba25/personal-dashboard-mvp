@@ -9,7 +9,6 @@ body {
   color: #fff;
   position: relative;
   overflow-x: hidden;
-  padding-top: 70px; /* space for fixed navbar */
 }
 
 /* Navigation Bar */
@@ -19,42 +18,42 @@ body {
   left: 0;
   width: 100%;
   height: 60px;
-  background: rgba(13, 30, 58, 0.95); /* slight transparency */
+  background: rgba(13, 30, 58, 0.95);
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* left links on left side */
   align-items: center;
   padding: 0 40px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   z-index: 1000;
 }
 
-.nav-left,
-.nav-right {
-  display: flex;
-  gap: 25px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-left li a,
-.nav-right li a {
-  text-decoration: none;
-  color: #fff;
-  font-weight: 500;
-  font-size: 16px;
-  transition: color 0.3s;
-}
-
-.nav-left li a:hover,
-.nav-right li a:hover {
-  color: #00bfff;
+/* Centered Logo */
+.nav-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-logo img {
   height: 50px;
   display: block;
-  margin: 0 auto;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #00aaff;
 }
 
 /* Featured Section */
@@ -62,26 +61,26 @@ body {
   display: flex;
   justify-content: center;
   gap: 30px;
-  margin: 20px 0 40px 0;
+  margin: 80px 0 40px 0; /* top margin adjusted for navbar */
   flex-wrap: wrap;
 }
 
-/* Featured Cards */
+/* Featured Cards (same as game-card, just bigger) */
 .featured-card {
   position: relative;
-  width: 280px; /* bigger than normal game cards */
+  width: 280px;   /* bigger than normal game cards */
   height: 160px;
   cursor: pointer;
   overflow: hidden;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   background: #fff;
 }
 
 .featured-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 
 .featured-card img {
@@ -92,21 +91,21 @@ body {
 }
 
 /* Overlay with featured game name inside card */
-.overlay {
+.featured-card h2 {
   position: absolute;
   bottom: 0;
   width: 100%;
   text-align: center;
   background: rgba(0,0,0,0.6);
   color: #fff;
+  margin: 0;
+  font-size: 16px;
+  padding: 5px 0;
   opacity: 0;
   transition: opacity 0.3s;
-  padding: 5px 0;
-  font-size: 14px;
 }
 
-.featured-card:hover .overlay,
-.game-card:hover .overlay {
+.featured-card:hover h2 {
   opacity: 1;
 }
 
@@ -174,6 +173,25 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* Overlay with game name */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s;
+  padding: 5px 0;
+  font-size: 14px;
+}
+
+.game-card:hover .overlay,
+.featured-card:hover .overlay {
+  opacity: 1;
 }
 
 /* Emoji Rain Background */
