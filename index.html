@@ -20,6 +20,7 @@
 <!-- Favicon -->
 <link rel="icon" href="logo.PNG" type="image/png">
 
+<!-- Link to external CSS -->
 <link rel="stylesheet" href="style.css">
 
 <!-- Rotating Title Script -->
@@ -31,11 +32,9 @@
     index = (index + 1) % titles.length;
   }, 2000);
 </script>
+
 </head>
 <body>
-
-<!-- Emoji rain background -->
-<div id="emoji-background"></div>
 
 <!-- Navbar -->
 <nav class="navbar">
@@ -46,6 +45,9 @@
     <img src="logo.PNG" alt="GUB Logo">
   </div>
 </nav>
+
+<!-- Emoji rain background -->
+<div id="emoji-background"></div>
 
 <!-- Featured Games Section -->
 <div id="featured-section">
@@ -68,95 +70,95 @@
 <div id="game-container"></div>
 
 <script>
-  // Emoji rain
-  const emojiContainer = document.getElementById("emoji-background");
-  function createEmoji() {
-    const emoji = document.createElement("div");
-    emoji.classList.add("emoji");
-    emoji.innerText = "🎮";
-    emoji.style.left = Math.random() * 100 + "vw";
-    emoji.style.animationDuration = (Math.random() * 3 + 2) + "s";
-    emojiContainer.appendChild(emoji);
-    setTimeout(() => emoji.remove(), 5000);
-  }
-  setInterval(createEmoji, 300);
+// Emoji rain
+const emojiContainer = document.getElementById("emoji-background");
+function createEmoji() {
+  const emoji = document.createElement("div");
+  emoji.classList.add("emoji");
+  emoji.innerText = "🎮";
+  emoji.style.left = Math.random() * 100 + "vw";
+  emoji.style.animationDuration = (Math.random() * 3 + 2) + "s";
+  emojiContainer.appendChild(emoji);
+  setTimeout(() => emoji.remove(), 5000);
+}
+setInterval(createEmoji, 300);
 
-  // Load games from gxmes.json
-  fetch('gxmes.json')
-    .then(response => response.json())
-    .then(games => {
-      const container = document.getElementById('game-container');
+// Load games from gxmes.json
+fetch('gxmes.json')
+  .then(response => response.json())
+  .then(games => {
+    const container = document.getElementById('game-container');
 
-      games.forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
-        card.onclick = () => {
-          gtag('event', 'game_click', {
-            'event_category': 'Games',
-            'event_label': game.name,
-            'value': 1
-          });
-          window.location.href = game.file;
-        };
-
-        const img = document.createElement('img');
-        img.src = game.thumbnail || 'thumbnails/thumbnail_default.jpg';
-
-        const overlay = document.createElement('div');
-        overlay.className = 'overlay';
-        overlay.innerText = game.name;
-
-        card.appendChild(img);
-        card.appendChild(overlay);
-        container.appendChild(card);
-      });
-
-      // Search bar
-      const searchBar = document.getElementById('search-bar');
-      searchBar.addEventListener('input', () => {
-        const query = searchBar.value.toLowerCase();
-        document.querySelectorAll('.game-card').forEach((card, i) => {
-          const gameName = games[i].name.toLowerCase();
-          card.style.display = gameName.includes(query) ? 'block' : 'none';
+    games.forEach(game => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.onclick = () => {
+        gtag('event', 'game_click', {
+          'event_category': 'Games',
+          'event_label': game.name,
+          'value': 1
         });
-      });
-
-      // Featured Section as big normal cards
-      const setFeaturedGames = (games) => {
-        const today = new Date();
-        const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-        const index = Math.abs(seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0)) % games.length;
-        const gameOfDay = games[index];
-
-        const gameOfDayDiv = document.getElementById("game-of-day");
-        gameOfDayDiv.innerHTML = "";
-        const gdImg = document.createElement("img");
-        gdImg.src = gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg';
-        const gdOverlay = document.createElement("div");
-        gdOverlay.className = "overlay";
-        gdOverlay.innerText = gameOfDay.name;
-        gameOfDayDiv.appendChild(gdImg);
-        gameOfDayDiv.appendChild(gdOverlay);
-        gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
-
-        const favorite = games.find(g => g.favorite);
-        if (favorite) {
-          const favoriteDiv = document.getElementById("owners-favorite");
-          favoriteDiv.innerHTML = "";
-          const favImg = document.createElement("img");
-          favImg.src = favorite.thumbnail || 'thumbnails/thumbnail_default.jpg';
-          const favOverlay = document.createElement("div");
-          favOverlay.className = "overlay";
-          favOverlay.innerText = favorite.name;
-          favoriteDiv.appendChild(favImg);
-          favoriteDiv.appendChild(favOverlay);
-          favoriteDiv.onclick = () => window.location.href = favorite.file;
-        }
+        window.location.href = game.file;
       };
 
-      setFeaturedGames(games);
-    })
-    .catch(err => console.error('Error loading games:', err));
+      const img = document.createElement('img');
+      img.src = game.thumbnail || 'thumbnails/thumbnail_default.jpg';
+
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
+      overlay.innerText = game.name;
+
+      card.appendChild(img);
+      card.appendChild(overlay);
+      container.appendChild(card);
+    });
+
+    // Search bar
+    const searchBar = document.getElementById('search-bar');
+    searchBar.addEventListener('input', () => {
+      const query = searchBar.value.toLowerCase();
+      document.querySelectorAll('.game-card').forEach((card, i) => {
+        const gameName = games[i].name.toLowerCase();
+        card.style.display = gameName.includes(query) ? 'block' : 'none';
+      });
+    });
+
+    // Featured Section as big normal cards
+    const setFeaturedGames = (games) => {
+      const today = new Date();
+      const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      const index = Math.abs(seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0)) % games.length;
+      const gameOfDay = games[index];
+
+      const gameOfDayDiv = document.getElementById("game-of-day");
+      gameOfDayDiv.innerHTML = "";
+      const gdImg = document.createElement("img");
+      gdImg.src = gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg';
+      const gdOverlay = document.createElement("div");
+      gdOverlay.className = "overlay";
+      gdOverlay.innerText = gameOfDay.name;
+      gameOfDayDiv.appendChild(gdImg);
+      gameOfDayDiv.appendChild(gdOverlay);
+      gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
+
+      const favorite = games.find(g => g.favorite);
+      if (favorite) {
+        const favoriteDiv = document.getElementById("owners-favorite");
+        favoriteDiv.innerHTML = "";
+        const favImg = document.createElement("img");
+        favImg.src = favorite.thumbnail || 'thumbnails/thumbnail_default.jpg';
+        const favOverlay = document.createElement("div");
+        favOverlay.className = "overlay";
+        favOverlay.innerText = favorite.name;
+        favoriteDiv.appendChild(favImg);
+        favoriteDiv.appendChild(favOverlay);
+        favoriteDiv.onclick = () => window.location.href = favorite.file;
+      }
+    };
+
+    setFeaturedGames(games);
+  })
+  .catch(err => console.error('Error loading games:', err));
 </script>
 
 </body>
