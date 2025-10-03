@@ -50,5 +50,10 @@
         "name": "Galaga",
         "file": "Gxmes/galaga.html",
         "thumbnail": "thumbnails/galaga.jpg"
+    },
+    {
+        "name": "Steal a Brainrot",
+        "file": "Gxmes/steal_a_brainrot.html",
+        "thumbnail": "thumbnails/steal_a_brainrot.jpg"
     }
 ]
