@@ -1,14 +1,21 @@
+/* Reset all spacing + fix white border in about:blank */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #132c61;
+  overflow-x: hidden;
+}
+
 /* General page setup */
 body {
-  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: #132c61; /* dark base for emoji rain */
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #fff;
   position: relative;
-  overflow-x: hidden;
 }
 
 /* Navbar */
@@ -23,6 +30,7 @@ body {
   box-sizing: border-box;
 }
 
+/* Nav links */
 .nav-links {
   list-style: none;
   margin: 0;
@@ -52,7 +60,7 @@ body {
 
 /* About:Blank button (far right of navbar) */
 .aboutblank-btn {
-  margin-left: auto; /* pushes it to the far right */
+  margin-left: auto;
   padding: 8px 16px;
   background: #007bff;
   color: #fff;
@@ -162,7 +170,7 @@ body {
   gap: 20px;
   max-width: 1200px;
   padding: 20px;
-  z-index: 1; /* ensures it’s above the emoji background */
+  z-index: 1;
   position: relative;
 }
 
@@ -198,7 +206,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* behind everything */
+  z-index: -1;
   pointer-events: none;
   overflow: hidden;
 }
