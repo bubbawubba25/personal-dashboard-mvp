@@ -55,5 +55,10 @@
         "name": "Steal a Brainrot",
         "file": "Gxmes/steal_a_brainrot.html",
         "thumbnail": "thumbnails/steal_a_brainrot.jpg"
+    },
+    {
+        "name": "Tiny Fishing",
+        "file": "Gxmes/tiny_fishing.html",
+        "thumbnail": "thumbnails/tiny_fishing.jpg"
     }
 ]
