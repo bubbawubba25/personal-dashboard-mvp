@@ -29,7 +29,7 @@ body {
   background: rgba(15, 32, 72, 0.95);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* center the logo */
   box-sizing: border-box;
   padding: 0 20px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -44,18 +44,32 @@ body {
   padding: 0;
   display: flex;
   align-items: center;
+  position: absolute;
+  left: 20px; /* aligned left side */
 }
 
-.nav-links li a {
+.nav-links li a,
+.aboutblank-btn {
   color: #fff;
   text-decoration: none;
   font-weight: 600;
   padding: 0 15px;
+  cursor: pointer;
   transition: color 0.3s;
+  background: none;
+  border: none;
+  font-size: 1rem;
 }
 
-.nav-links li a:hover {
+.nav-links li a:hover,
+.aboutblank-btn:hover {
   color: #00aaff;
+  transform: translateY(-2px);
+}
+
+.nav-links li a:active,
+.aboutblank-btn:active {
+  transform: translateY(0);
 }
 
 /* Centered logo */
@@ -70,28 +84,6 @@ body {
   width: auto;
   display: block;
   cursor: pointer;
-}
-
-/* Optional "About:Blank" button (right side) */
-.aboutblank-btn {
-  margin-left: auto;
-  padding: 8px 16px;
-  background: #007bff;
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.aboutblank-btn:hover {
-  background: #0056b3;
-  transform: translateY(-2px);
-}
-
-.aboutblank-btn:active {
-  transform: translateY(0);
 }
 
 /* Featured Section */
@@ -238,3 +230,4 @@ body {
     transform: translateY(110vh);
   }
 }
+
