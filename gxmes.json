@@ -60,5 +60,10 @@
         "name": "Tiny Fishing",
         "file": "Gxmes/tiny_fishing.html",
         "thumbnail": "thumbnails/tiny_fishing.jpg"
+    },
+    {
+        "name": "Idle Miner Tycoon",
+        "file": "Gxmes/idle_miner.html",
+        "thumbnail": "thumbnails/idle_miner.jpg"
     }
 ]
