@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: #0f2048;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .login-container {
+    background: #132c61;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 320px;
+  }
+
+  input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    text-align: center;
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background: #0056b3;
+  }
+
+  #error {
+    color: #ff5c5c;
+    margin-top: 10px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Enter Access Code</h2>
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="checkPassword()">Login</button>
+    <p id="error">Incorrect password</p>
+  </div>
+
+<script>
+async function checkPassword() {
+  const input = document.getElementById("password").value;
+  const hashedInput = await hash(input);
+
+  // SHA-256 for "password123" (change this later)
+  const correctHash = "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f";
+
+  if (hashedInput === correctHash) {
+    localStorage.setItem("authorized", "true");
+    window.location.href = "index.html";
+  } else {
+    document.getElementById("error").style.display = "block";
+  }
+}
+
+async function hash(str) {
+  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buffer))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+</script>
+</body>
+</html>
