@@ -65,5 +65,10 @@
         "name": "Idle Miner Tycoon",
         "file": "Gxmes/idle_miner.html",
         "thumbnail": "thumbnails/idle_miner.jpg"
+    },
+    {
+        "name": "Gun Mayhem",
+        "file": "Gxmes/gun_mayhem.html",
+        "thumbnail": "thumbnails/gun_mayhem.jpg"
     }
 ]
