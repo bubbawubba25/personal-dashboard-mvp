@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-  if (localStorage.getItem("authorized") !== "true") {
-    window.location.href = "login.html";
-  }
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🅶🆄🅱</title>
 
-<!-- Google tag (gtag.js) -->
+<!-- Redirect if not authorized -->
+<script>
+  if (localStorage.getItem("authorized") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
+
+<!-- Google tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4J4WLYMHLS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -28,7 +30,7 @@
 <!-- Link to external CSS -->
 <link rel="stylesheet" href="style.css">
 
-<!-- Rotating Title Script -->
+<!-- Rotating title -->
 <script>
   const titles = ["🅶🆄🅱","FREE", "FUN", "G@MES"];
   let index = 0;
@@ -37,22 +39,23 @@
     index = (index + 1) % titles.length;
   }, 2000);
 </script>
-
 </head>
 <body>
 
+<!-- Navbar -->
 <nav class="navbar">
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
-    <li><a href="about.html">About:Blank</a></li>
-    <li><button class="aboutblank-btn" onclick="openAboutBlank()">About:Blank</button></li>
   </ul>
+
   <div class="nav-logo">
-    <img src="logo.png" alt="Logo">
+    <img src="logo.PNG" alt="Logo">
   </div>
+
+  <button class="aboutblank-btn" onclick="openAboutBlank()">About:Blank</button>
 </nav>
 
-<!-- Emoji rain background -->
+<!-- Emoji background -->
 <div id="emoji-background"></div>
 
 <!-- Featured Games Section -->
@@ -89,23 +92,16 @@ function createEmoji() {
 }
 setInterval(createEmoji, 300);
 
-// Load games from gxmes.json
+// Load games
 fetch('gxmes.json')
-  .then(response => response.json())
+  .then(res => res.json())
   .then(games => {
     const container = document.getElementById('game-container');
 
-    games.forEach(game => {
+    games.forEach((game) => {
       const card = document.createElement('div');
       card.className = 'game-card';
-      card.onclick = () => {
-        gtag('event', 'game_click', {
-          'event_category': 'Games',
-          'event_label': game.name,
-          'value': 1
-        });
-        window.location.href = game.file;
-      };
+      card.onclick = () => { window.location.href = game.file; };
 
       const img = document.createElement('img');
       img.src = game.thumbnail || 'thumbnails/thumbnail_default.jpg';
@@ -119,8 +115,8 @@ fetch('gxmes.json')
       container.appendChild(card);
     });
 
-    // Featured Section as big normal cards
-    const setFeaturedGames = (games) => {
+    // Featured Section
+    const setFeaturedGames = () => {
       const today = new Date();
       const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
       const index = Math.abs(seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0)) % games.length;
@@ -138,31 +134,28 @@ fetch('gxmes.json')
       gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
 
       const favorite = games.find(g => g.favorite);
-      if (favorite) {
-        const favoriteDiv = document.getElementById("owners-favorite");
-        favoriteDiv.innerHTML = "";
+      if(favorite){
+        const favDiv = document.getElementById("owners-favorite");
+        favDiv.innerHTML = "";
         const favImg = document.createElement("img");
         favImg.src = favorite.thumbnail || 'thumbnails/thumbnail_default.jpg';
         const favOverlay = document.createElement("div");
         favOverlay.className = "overlay";
         favOverlay.innerText = favorite.name;
-        favoriteDiv.appendChild(favImg);
-        favoriteDiv.appendChild(favOverlay);
-        favoriteDiv.onclick = () => window.location.href = favorite.file;
+        favDiv.appendChild(favImg);
+        favDiv.appendChild(favOverlay);
+        favDiv.onclick = () => window.location.href = favorite.file;
       }
     };
 
     setFeaturedGames(games);
-  })
-  .catch(err => console.error('Error loading games:', err));
+  });
 
-// 🔹 About Blank Button Script
-document.getElementById("blank-button").addEventListener("click", () => {
+// About:Blank button
+function openAboutBlank() {
   const win = window.open("about:blank", "_blank");
-  win.document.write(`
-    <iframe src="${window.location.href}" style="border:none; width:100%; height:100vh;"></iframe>
-  `);
-});
+  win.document.write(`<iframe src="${window.location.href}" style="border:none; width:100%; height:100vh;"></iframe>`);
+}
 </script>
 
 </body>
