@@ -1,4 +1,4 @@
-/* Reset all spacing + fix white border in about:blank */
+/* Reset + General Setup */
 html, body {
   margin: 0;
   padding: 0;
@@ -8,7 +8,6 @@ html, body {
   overflow-x: hidden;
 }
 
-/* General page setup */
 body {
   font-family: 'Poppins', sans-serif;
   display: flex;
@@ -16,7 +15,7 @@ body {
   align-items: center;
   color: #fff;
   position: relative;
-  padding-top: 80px; /* prevent content from hiding behind fixed navbar */
+  padding-top: 80px; /* so content doesn't hide behind fixed navbar */
 }
 
 /* Fixed Navbar */
@@ -29,7 +28,7 @@ body {
   background: rgba(15, 32, 72, 0.95);
   display: flex;
   align-items: center;
-  justify-content: center; /* center the logo */
+  justify-content: space-between;
   box-sizing: border-box;
   padding: 0 20px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -37,42 +36,36 @@ body {
   backdrop-filter: blur(6px);
 }
 
-/* Nav links (Home only for now) */
+/* Left Side - Nav Links */
 .nav-links {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   align-items: center;
-  position: absolute;
-  left: 20px; /* aligned left side */
 }
 
-.nav-links li a,
-.aboutblank-btn {
+.nav-links li {
+  margin-right: 10px;
+}
+
+.nav-links li a {
   color: #fff;
   text-decoration: none;
   font-weight: 600;
-  padding: 0 15px;
-  cursor: pointer;
-  transition: color 0.3s;
-  background: none;
-  border: none;
-  font-size: 1rem;
+  font-size: 16px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
 }
 
-.nav-links li a:hover,
-.aboutblank-btn:hover {
-  color: #00aaff;
+.nav-links li a:hover {
+  background: #007bff;
+  color: #fff;
   transform: translateY(-2px);
 }
 
-.nav-links li a:active,
-.aboutblank-btn:active {
-  transform: translateY(0);
-}
-
-/* Centered logo */
+/* Center - Logo */
 .nav-logo {
   position: absolute;
   left: 50%;
@@ -80,10 +73,38 @@ body {
 }
 
 .nav-logo img {
-  height: 60px;
+  height: 58px;
   width: auto;
   display: block;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.nav-logo img:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+/* Right Side - About Blank Button */
+.aboutblank-btn {
+  background: transparent;
+  border: 2px solid #007bff;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, color 0.3s;
+}
+
+.aboutblank-btn:hover {
+  background: #007bff;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.aboutblank-btn:active {
+  transform: translateY(0);
 }
 
 /* Featured Section */
@@ -230,4 +251,3 @@ body {
     transform: translateY(110vh);
   }
 }
-
