@@ -70,5 +70,10 @@
         "name": "Gun Mayhem",
         "file": "Gxmes/gun_mayhem.html",
         "thumbnail": "thumbnails/gun_mayhem.jpg"
+    },
+    {
+        "name": "Serenitrove",
+        "file": "Gxmes/serenitrove.html",
+        "thumbnail": "thumbnails/serenitrove.jpg"
     }
 ]
