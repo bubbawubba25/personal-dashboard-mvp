@@ -1,7 +1,7 @@
 
 [
     {
-        "name": "Basketball Bros.",
+        "name": "Baseball Bros.",
         "file": "Gxmes/baseball_bros.html",
         "thumbnail": "thumbnails/baseball_bros.jpg"
     },
@@ -75,5 +75,10 @@
         "name": "Serenitrove",
         "file": "Gxmes/serenitrove.html",
         "thumbnail": "thumbnails/serenitrove.jpg"
+    },
+    {
+        "name": "Surrounded",
+        "file": "Gxmes/surrounded.html",
+        "thumbnail": "thumbnails/surrounded.jpg"
     }
 ]
