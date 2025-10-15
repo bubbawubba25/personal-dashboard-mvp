@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Survivor — Zombie Rush</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --panel:#0f1720;
+    --accent:#ff5c33;
+    --muted:#9aa6b2;
+    --white:#eceff1;
+  }
+  html,body{height:100%;margin:0;}
+  body{
+    background: linear-gradient(180deg,#071021 0%,var(--bg) 100%);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* Game container */
+  #game-wrap{
+    width:100%;
+    max-width:1100px;
+    height:80vh;
+    max-height:800px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    position:relative;
+    overflow:hidden;
+  }
+
+  canvas{
+    display:block;
+    width:100%;
+    height:100%;
+    background: linear-gradient(180deg,#031020, #061226);
+  }
+
+  /* top HUD */
+  .hud{
+    position:absolute;
+    left:16px;
+    top:12px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    z-index:10;
+  }
+  .score{
+    background: rgba(255,255,255,0.03);
+    padding:8px 12px;
+    border-radius:8px;
+    font-weight:600;
+    color:var(--white);
+    min-width:120px;
+    text-align:center;
+  }
+  .health-bar{
+    width:220px;
+    height:14px;
+    background: rgba(255,255,255,0.06);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .health-fill{
+    height:100%;
+    width:100%;
+    background: linear-gradient(90deg,#ff5c33,#ff9a66);
+    transition:width .2s linear;
+  }
+
+  /* bottom right: instructions */
+  .help{
+    position:absolute;
+    right:12px;
+    bottom:12px;
+    background: rgba(255,255,255,0.03);
+    padding:10px 12px;
+    border-radius:8px;
+    color:var(--muted);
+    font-size:13px;
+    z-index:10;
+    max-width:220px;
+  }
+
+  /* overlays: menu and game over */
+  .overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:20;
+    background: linear-gradient(180deg, rgba(1,5,10,0.55), rgba(1,5,10,0.6));
+  }
+  .menu{
+    width:90%;
+    max-width:520px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    padding:22px;
+    border-radius:10px;
+    text-align:center;
+  }
+  .menu h1{margin:0 0 6px;font-size:22px;}
+  .menu p{color:var(--muted);margin:0 0 16px;font-size:14px;}
+  .menu input[type="text"]{
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.06);
+    background:rgba(255,255,255,0.02);
+    color:var(--white);
+    margin-bottom:12px;
+    font-size:15px;
+  }
+  .btn{
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(255,92,51,0.14);
+  }
+  .btn.secondary{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    color:var(--white);
+    font-weight:600;
+    margin-left:8px;
+  }
+
+  /* Leaderboard list */
+  .leaderboard{
+    margin-top:12px;
+    text-align:left;
+    max-height:180px;
+    overflow:auto;
+  }
+  .leaderboard ol{
+    padding-left:18px;
+    margin:6px 0 0 0;
+    color:var(--muted);
+  }
+  .leaderboard li{
+    padding:6px 0;
+    font-size:14px;
+  }
+
+  /* Game over contents */
+  .gameover-box{
+    width:90%;
+    max-width:520px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    padding:22px;
+    border-radius:10px;
+    text-align:center;
+  }
+  .muted{color:var(--muted);font-size:14px;}
+  @media (max-width:640px){
+    .help{display:none;}
+    .nav{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="game-wrap">
+  <canvas id="gameCanvas" width="1200" height="800"></canvas>
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="score" id="scoreBox">Score: 0</div>
+    <div class="health-bar" title="Health">
+      <div class="health-fill" id="healthFill" style="width:100%"></div>
+    </div>
+  </div>
+
+  <div class="help">
+    Controls:<br>
+    WASD = Move • Mouse = Aim • Left click = Swing bat<br>
+    Kill zombies for points. Upgrades later.
+  </div>
+
+  <!-- Start menu overlay -->
+  <div class="overlay" id="menuOverlay">
+    <div class="menu">
+      <h1>Zombie Rush</h1>
+      <p>Enter your name and press Start. Kill zombies to earn points!</p>
+      <input id="playerName" type="text" placeholder="Your name (will appear on leaderboard)" maxlength="20" />
+      <div style="display:flex; justify-content:center; gap:10px;">
+        <button class="btn" id="startBtn">Start Game</button>
+        <button class="btn secondary" id="openLB">View Leaderboard</button>
+      </div>
+
+      <div class="leaderboard" id="menuLeaderboard" style="display:none;">
+        <h3 style="margin:12px 0 6px 0">Top Scores</h3>
+        <ol id="menuLBList"></ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game over overlay (hidden) -->
+  <div class="overlay" id="gameOverOverlay" style="display:none;">
+    <div class="gameover-box">
+      <h2 id="finalTitle">You died</h2>
+      <p class="muted" id="finalScore">Score: 0</p>
+      <div style="margin-top:10px;">
+        <button class="btn" id="retryBtn">Play Again</button>
+        <button class="btn secondary" id="backMenu">Back to Menu</button>
+      </div>
+
+      <div style="margin-top:14px; text-align:left;">
+        <h3 style="margin:6px 0">Leaderboard</h3>
+        <ol id="gameOverLB"></ol>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ==========================
+   Simple Top-down Survivor
+   ==========================
+   - Player is a circle, uses WASD to move
+   - Aim with mouse, left click swings bat (melee arc)
+   - Zombies spawn in waves, chase player
+   - Kill zombies for points. Score saved to localStorage leaderboard
+   - Basic settings easy to tweak below
+*/
+
+/* ---- Config ---- */
+const CONFIG = {
+  width: 1200, height: 800, // internal canvas resolution (will scale)
+  player: { radius: 14, speed: 180, maxHealth: 100, attackCooldown: 400, attackRange: 40, attackAngleDeg: 90, attackDamage: 40 },
+  zombie: { baseHP: 25, baseSpeed: 50, spawnPerWave: 6, waveDelay: 2800 },
+  spawnMargin: 80,
+  pointsPerKill: 10
+};
+
+/* ---- State ---- */
+let canvas = document.getElementById('gameCanvas');
+let ctx = canvas.getContext('2d');
+canvas.width = CONFIG.width; canvas.height = CONFIG.height;
+
+/* scale canvas to container size */
+function resizeCanvasToFit(){
+  const wrap = document.getElementById('game-wrap');
+  const rect = wrap.getBoundingClientRect();
+  // keep aspect by width
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+}
+window.addEventListener('resize', resizeCanvasToFit);
+resizeCanvasToFit();
+
+/* Input */
+const input = { up:false, down:false, left:false, right:false, mouseX:0, mouseY:0, mouseDown:false };
+window.addEventListener('keydown', e=>{ if(e.key==='w'||e.key==='W') input.up=true; if(e.key==='s'||e.key==='S') input.down=true; if(e.key==='a'||e.key==='A') input.left=true; if(e.key==='d'||e.key==='D') input.right=true; });
+window.addEventListener('keyup', e=>{ if(e.key==='w'||e.key==='W') input.up=false; if(e.key==='s'||e.key==='S') input.down=false; if(e.key==='a'||e.key==='A') input.left=false; if(e.key==='d'||e.key==='D') input.right=false; });
+canvas.addEventListener('mousemove', e=>{
+  const r = canvas.getBoundingClientRect();
+  // convert mouse to internal canvas coordinate
+  const scaleX = canvas.width / r.width, scaleY = canvas.height / r.height;
+  input.mouseX = (e.clientX - r.left) * scaleX;
+  input.mouseY = (e.clientY - r.top) * scaleY;
+});
+canvas.addEventListener('mousedown', e=>{ input.mouseDown = true; });
+window.addEventListener('mouseup', e=>{ input.mouseDown = false; });
+
+/* Player data */
+let player = {
+  x: CONFIG.width/2,
+  y: CONFIG.height/2,
+  vx:0, vy:0,
+  hp: CONFIG.player.maxHealth,
+  name: 'Player',
+  score: 0,
+  lastAttack: 0
+};
+
+/* Zombies array */
+let zombies = [];
+let alive = false;
+let lastFrameTime=performance.now();
+let spawnTimer = 0;
+let wave = 0;
+let waveInProgress = false;
+
+/* DOM elements */
+const healthFill = document.getElementById('healthFill');
+const scoreBox = document.getElementById('scoreBox');
+const menuOverlay = document.getElementById('menuOverlay');
+const gameOverOverlay = document.getElementById('gameOverOverlay');
+const startBtn = document.getElementById('startBtn');
+const retryBtn = document.getElementById('retryBtn');
+const backMenuBtn = document.getElementById('backMenu');
+const playerNameInput = document.getElementById('playerName');
+const menuLB = document.getElementById('menuLBList');
+const openLBBtn = document.getElementById('openLB');
+
+/* Leaderboard storage key */
+const LB_KEY = 'survivor_leaderboard_v1';
+
+/* Utility functions */
+function rand(min,max){ return Math.random()*(max-min)+min; }
+function dist(ax,ay,bx,by){ const dx=ax-bx, dy=ay-by; return Math.sqrt(dx*dx+dy*dy); }
+function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
+
+/* Spawn a zombie at random edge */
+function spawnZombie(hpMultiplier=1, speedMultiplier=1){
+  // pick spawn edge (top/right/bottom/left)
+  let side = Math.floor(rand(0,4));
+  let x,y;
+  const m = CONFIG.spawnMargin;
+  if(side===0){ x = rand(0, CONFIG.width); y = -m; }
+  else if(side===1){ x = CONFIG.width + m; y = rand(0, CONFIG.height); }
+  else if(side===2){ x = rand(0, CONFIG.width); y = CONFIG.height + m; }
+  else { x = -m; y = rand(0, CONFIG.height); }
+
+  const z = {
+    x, y,
+    r: rand(10,16),
+    hp: CONFIG.zombie.baseHP * hpMultiplier,
+    maxHp: CONFIG.zombie.baseHP * hpMultiplier,
+    speed: CONFIG.zombie.baseSpeed * speedMultiplier,
+    angle: 0
+  };
+  zombies.push(z);
+}
+
+/* Start new wave */
+function startWave(){
+  wave++;
+  waveInProgress = true;
+  const base = CONFIG.zombie.spawnPerWave + Math.floor(wave * 1.2);
+  const hpMul = 1 + (wave-1)*0.12;
+  const spdMul = 1 + (wave-1)*0.03;
+  for(let i=0;i<base;i++){
+    setTimeout(()=> spawnZombie(hpMul, spdMul), i*200 + rand(0,700));
+  }
+  // wave will be considered done when no zombies remain
+}
+
+/* Update game logic */
+function update(delta){
+  if(!alive) return;
+
+  // player movement
+  let mvx = 0, mvy = 0;
+  if(input.up) mvy -= 1;
+  if(input.down) mvy += 1;
+  if(input.left) mvx -= 1;
+  if(input.right) mvx += 1;
+  const len = Math.hypot(mvx, mvy) || 1;
+  player.vx = (mvx/len) * CONFIG.player.speed;
+  player.vy = (mvy/len) * CONFIG.player.speed;
+  player.x += player.vx * delta;
+  player.y += player.vy * delta;
+  // clamp to arena
+  player.x = clamp(player.x, 10, CONFIG.width-10);
+  player.y = clamp(player.y, 10, CONFIG.height-10);
+
+  // attack handling (left click)
+  const now = performance.now();
+  if(input.mouseDown && now - player.lastAttack > CONFIG.player.attackCooldown){
+    player.lastAttack = now;
+    doAttack();
+  }
+
+  // update zombies: move toward player
+  for(let i=zombies.length-1;i>=0;i--){
+    const z = zombies[i];
+    const dx = player.x - z.x, dy = player.y - z.y;
+    const d = Math.hypot(dx,dy) || 1;
+    z.x += (dx/d) * z.speed * delta;
+    z.y += (dy/d) * z.speed * delta;
+    z.angle = Math.atan2(dy, dx);
+
+    // collision with player: damage
+    if(dist(z.x,z.y, player.x, player.y) < z.r + CONFIG.player.radius){
+      // deal damage and push player slightly
+      const damage = 8 * delta * 30; // scaled per second
+      player.hp -= damage;
+      // push zombie out slightly
+      const push = 6;
+      z.x -= Math.cos(z.angle) * push;
+      z.y -= Math.sin(z.angle) * push;
+      if(player.hp <= 0){
+        player.hp = 0;
+        endGame();
+      }
+    }
+
+    // remove dead
+    if(z.hp <= 0){
+      // reward
+      player.score += CONFIG.pointsPerKill;
+      zombies.splice(i,1);
+    }
+  }
+
+  // wave management: if none left, start next wave after delay
+  if(waveInProgress && zombies.length === 0){
+    waveInProgress = false;
+    setTimeout(()=> startWave(), CONFIG.zombie.waveDelay);
+  }
+
+  // update HUD
+  scoreBox.textContent = `Score: ${Math.floor(player.score)}`;
+  healthFill.style.width = `${(player.hp / CONFIG.player.maxHealth) * 100}%`;
+}
+
+/* Attack logic: melee arc in direction of mouse */
+function doAttack(){
+  // compute mouse angle relative to player
+  const ax = player.x, ay = player.y;
+  const mx = input.mouseX, my = input.mouseY;
+  const ang = Math.atan2(my - ay, mx - ax);
+  const attackRange = CONFIG.player.attackRange;
+  const halfAngle = (CONFIG.player.attackAngleDeg * Math.PI/180) / 2;
+  const dmg = CONFIG.player.attackDamage;
+
+  // simple visual effect stored for draw
+  attackEffects.push({x:ax, y:ay, angle:ang, t:0});
+
+  // check zombies in arc
+  for(let z of zombies){
+    const dx = z.x - ax, dy = z.y - ay;
+    const d = Math.hypot(dx,dy);
+    if(d <= attackRange + z.r){
+      const a = Math.atan2(dy, dx);
+      // normalize to -PI..PI
+      let diff = Math.atan2(Math.sin(a-ang), Math.cos(a-ang));
+      if(Math.abs(diff) <= halfAngle){
+        // hit
+        z.hp -= dmg;
+      }
+    }
+  }
+}
+
+/* Draw functions */
+let attackEffects = [];
+function draw(){
+  // clear
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+
+  // arena background
+  // subtle grid
+  ctx.save();
+  ctx.globalAlpha = 0.06;
+  ctx.fillStyle = '#0b1620';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.restore();
+
+  // draw zombies
+  for(let z of zombies){
+    // body
+    ctx.save();
+    ctx.translate(z.x, z.y);
+    // shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.beginPath(); ctx.ellipse(0, z.r+6, z.r+6, z.r/2, 0, Math.PI*2); ctx.fill();
+    // body
+    const hpFrac = z.hp / z.maxHp;
+    ctx.fillStyle = `rgba(${Math.floor(200+55*(1-hpFrac))}, ${Math.floor(60+80*hpFrac)}, 60, 1)`;
+    ctx.beginPath(); ctx.arc(0,0,z.r,0,Math.PI*2); ctx.fill();
+    // eyes
+    ctx.fillStyle='#111';
+    ctx.beginPath(); ctx.arc(-z.r*0.26, -z.r*0.2, z.r*0.18,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(z.r*0.26, -z.r*0.2, z.r*0.18,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    // hp bar small
+    ctx.fillStyle='rgba(0,0,0,0.5)';
+    ctx.fillRect(z.x - z.r, z.y - z.r - 8, z.r*2, 4);
+    ctx.fillStyle='lime';
+    ctx.fillRect(z.x - z.r, z.y - z.r - 8, z.r*2 * Math.max(0, z.hp / z.maxHp), 4);
+  }
+
+  // draw player
+  // shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.beginPath(); ctx.ellipse(player.x, player.y + 12, CONFIG.player.radius+8, CONFIG.player.radius/2 + 6, 0, Math.PI*2); ctx.fill();
+  // body
+  ctx.fillStyle = '#2ee6a7';
+  ctx.beginPath(); ctx.arc(player.x, player.y, CONFIG.player.radius, 0, Math.PI*2); ctx.fill();
+  // facing direction indicator (small triangle)
+  const ang = Math.atan2(input.mouseY - player.y, input.mouseX - player.x);
+  ctx.save();
+  ctx.translate(player.x, player.y);
+  ctx.rotate(ang);
+  ctx.fillStyle = '#083f33';
+  ctx.beginPath(); ctx.moveTo(CONFIG.player.radius+2,0); ctx.lineTo(CONFIG.player.radius-4, -6); ctx.lineTo(CONFIG.player.radius-4, 6); ctx.closePath(); ctx.fill();
+  ctx.restore();
+
+  // draw attack effects
+  for(let i=attackEffects.length-1;i>=0;i--){
+    const e = attackEffects[i];
+    e.t += 1/60;
+    const alpha = Math.max(0, 1 - e.t * 1.7);
+    if(alpha <= 0){ attackEffects.splice(i,1); continue; }
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(e.x, e.y);
+    ctx.rotate(e.angle);
+    // arc shape
+    ctx.fillStyle = 'rgba(255,140,60,0.9)';
+    const angSpread = CONFIG.player.attackAngleDeg * Math.PI/180;
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.arc(0,0, CONFIG.player.attackRange + 10, -angSpread/2, angSpread/2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // show wave & zombies count
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
+  ctx.fillRect(10, canvas.height-40, 220, 30);
+  ctx.fillStyle = '#fff';
+  ctx.font = '14px Inter, Arial';
+  ctx.fillText(`Wave ${wave} • Zombies: ${zombies.length}`, 20, canvas.height-20);
+
+  // small crosshair at mouse
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+  ctx.beginPath(); ctx.arc(input.mouseX, input.mouseY, 6, 0, Math.PI*2); ctx.stroke();
+}
+
+/* Main loop */
+function loop(t){
+  const delta = (t - lastFrameTime)/1000;
+  lastFrameTime = t;
+  update(delta);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+/* Start game */
+function startGame(){
+  // initialize
+  player.x = CONFIG.width/2; player.y = CONFIG.height/2;
+  player.hp = CONFIG.player.maxHealth;
+  player.score = 0;
+  player.name = (playerNameInput.value.trim() || 'Player').slice(0,20);
+  zombies = [];
+  wave = 0;
+  waveInProgress = false;
+  alive = true;
+  menuOverlay.style.display = 'none';
+  gameOverOverlay.style.display = 'none';
+  // small delay then start first wave
+  setTimeout(()=> startWave(), 400);
+}
+
+/* End game flow */
+function endGame(){
+  if(!alive) return;
+  alive = false;
+  // save to leaderboard
+  saveScore(player.name, Math.floor(player.score));
+  // show overlay
+  document.getElementById('finalScore').textContent = `Score: ${Math.floor(player.score)}`;
+  document.getElementById('finalTitle').textContent = 'You died';
+  populateGameOverLB();
+  gameOverOverlay.style.display = 'flex';
+}
+
+/* Leaderboard functions */
+function loadLeaderboard(){
+  try{
+    const raw = localStorage.getItem(LB_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+
+function saveLeaderboard(list){
+  localStorage.setItem(LB_KEY, JSON.stringify(list));
+}
+
+function saveScore(name, score){
+  const list = loadLeaderboard();
+  list.push({name: name || 'Player', score: score || 0, date: Date.now()});
+  // sort desc and keep top 50
+  list.sort((a,b)=> b.score - a.score || a.date - b.date);
+  saveLeaderboard(list.slice(0,50));
+}
+
+function getTopList(limit=10){
+  return loadLeaderboard().slice(0,limit);
+}
+
+/* populate menu leaderboard */
+function populateMenuLB(){
+  const arr = getTopList(10);
+  menuLB.innerHTML = '';
+  if(arr.length===0){ menuLB.innerHTML = '<li class="muted">No scores yet</li>'; return; }
+  arr.forEach((e,i)=>{
+    const li = document.createElement('li');
+    li.textContent = `${i+1}. ${e.name} — ${e.score}`;
+    menuLB.appendChild(li);
+  });
+}
+
+/* populate gameover leaderboard */
+function populateGameOverLB(){
+  const arr = getTopList(10);
+  const out = document.getElementById('gameOverLB');
+  out.innerHTML = '';
+  if(arr.length===0){ out.innerHTML = '<li class="muted">No scores yet</li>'; return; }
+  arr.forEach((e,i)=>{
+    const li = document.createElement('li');
+    li.textContent = `${i+1}. ${e.name} — ${e.score}`;
+    out.appendChild(li);
+  });
+}
+
+/* UI wiring */
+startBtn.addEventListener('click', ()=>{
+  populateMenuLB();
+  startGame();
+});
+retryBtn.addEventListener('click', ()=>{
+  menuOverlay.style.display = 'none';
+  gameOverOverlay.style.display = 'none';
+  startGame();
+});
+backMenuBtn.addEventListener('click', ()=>{
+  gameOverOverlay.style.display = 'none';
+  menuOverlay.style.display = 'flex';
+  populateMenuLB();
+});
+openLBBtn.addEventListener('click', ()=>{
+  const el = document.getElementById('menuLeaderboard');
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  populateMenuLB();
+});
+
+/* Start animation loop */
+requestAnimationFrame(loop);
+
+/* initial populate LB */
+populateMenuLB();
+populateGameOverLB();
+
+</script>
+
+</body>
+</html>
