@@ -4,11 +4,20 @@ body {
   font-family: 'Poppins', sans-serif;
   height: 100vh;
   margin: 0;
-  background: linear-gradient(135deg, #0b1120 0%, #1a2a6c 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  color: #fff;
+  background: linear-gradient(-45deg, #0b1120, #1a2a6c, #007bff, #00c6ff);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .login-wrapper {
@@ -30,7 +39,6 @@ body {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   text-align: center;
   padding: 40px 50px;
-  color: #fff;
   transition: all 0.3s ease;
 }
 
@@ -89,24 +97,24 @@ button:hover {
   font-size: 14px;
 }
 
-/* Subtle glowing animation in the background */
+/* optional glow blob in background */
 body::before {
   content: "";
   position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(0, 204, 255, 0.2), transparent 70%);
-  animation: moveGlow 8s ease-in-out infinite alternate;
-  top: 20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 70%);
+  top: 10%;
   left: 10%;
+  animation: floatGlow 10s ease-in-out infinite alternate;
   z-index: -1;
 }
 
-@keyframes moveGlow {
+@keyframes floatGlow {
   from {
-    transform: translate(0, 0);
+    transform: translate(0, 0) scale(1);
   }
   to {
-    transform: translate(100px, 60px);
+    transform: translate(100px, 60px) scale(1.1);
   }
 }
