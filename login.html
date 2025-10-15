@@ -1,140 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Login</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  /* General Reset */
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  html, body {
-    height: 100%;
-    font-family: 'Poppins', sans-serif;
-    background: #000; /* solid black background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-
-  /* Frosted Glass Container */
-  .login-container {
-    background: rgba(255,255,255,0.05); /* semi-transparent glass */
-    backdrop-filter: blur(15px); /* strong blur */
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 50px 40px;
-    width: 360px;
-    text-align: center;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    color: #fff;
-  }
-
-  .login-container h2 {
-    font-weight: 600;
-    font-size: 26px;
-    margin-bottom: 30px;
-  }
-
-  /* Inputs */
-  input {
-    width: 100%;
-    padding: 14px 16px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.05);
-    color: #fff;
-    font-size: 16px;
-    outline: none;
-    text-align: center;
-    transition: all 0.3s ease;
-  }
-
-  input::placeholder {
-    color: rgba(255,255,255,0.6);
-  }
-
-  input:focus {
-    border-color: #00aaff;
-    box-shadow: 0 0 15px rgba(0,170,255,0.5);
-    background: rgba(255,255,255,0.08);
-  }
-
-  /* Button */
-  button {
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 15px;
-    border: none;
-    background: rgba(0,170,255,0.2);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-  }
-
-  button:hover {
-    background: rgba(0,170,255,0.4);
-    box-shadow: 0 0 20px rgba(0,170,255,0.6);
-    transform: translateY(-2px);
-  }
-
-  button:active {
-    transform: translateY(0);
-  }
-
-  /* Error Message */
-  #error {
-    margin-top: 10px;
-    display: none;
-    color: #ff5c5c;
-    text-shadow: 0 0 8px #ff5c5c;
-    font-weight: 500;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="css/login.css" />
 </head>
 <body>
-  <div class="login-container">
-    <h2>Enter Access Code</h2>
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="checkPassword()">Login</button>
-    <p id="error">Incorrect password</p>
+  <div class="login-wrapper">
+    <div class="login-container">
+      <h2>Enter Access Code</h2>
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="checkPassword()">Login</button>
+      <p id="error">Incorrect password</p>
+    </div>
   </div>
-
-<script>
-async function checkPassword() {
-  const input = document.getElementById("password").value;
-  const hashedInput = await hash(input);
-
-  // SHA-256 for "password123" (change this later)
-  const correctHash = "50e9468381c3b24be12e34b6025d855ad51ed1218975d103c9600f20931e406e";
-
-  if (hashedInput === correctHash) {
-    localStorage.setItem("authorized", "true");
-    window.location.href = "index.html";
-  } else {
-    const err = document.getElementById("error");
-    err.style.display = "block";
-    setTimeout(() => err.style.display = "none", 3000);
-  }
-}
-
-async function hash(str) {
-  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buffer))
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-</script>
+  <script src="js/login.js"></script>
 </body>
 </html>
