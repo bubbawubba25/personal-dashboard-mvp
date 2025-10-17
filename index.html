@@ -11,22 +11,23 @@
   <!-- favicon -->
   <link rel="icon" href="logo.PNG" type="image/png">
 
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
+
 <body>
 
   <!-- Navbar -->
-<nav class="navbar">
-  <a href="index.html" class="nav-icon">
-    <i class="fas fa-home"></i>
-  </a>
-</nav>
+  <nav class="navbar glassy-nav">
+    <a href="index.html" class="nav-icon active">
+      <i class="fas fa-home"></i>
+    </a>
+  </nav>
 
-  <!-- AURORA / BACKGROUND (pure CSS) -->
-  <div class="bg-aurora" aria-hidden></div>
+  <!-- Aurora Background -->
+  <div class="bg-aurora" aria-hidden="true"></div>
 
-  <!-- MAIN CONTENT -->
+  <!-- Main Content -->
   <main class="main">
     <header class="hero">
       <img class="site-logo" src="logo.PNG" alt="GUB logo" />
@@ -35,58 +36,64 @@
       </div>
     </header>
 
-    <!-- FEATURED ROW (full width cards) -->
+    <!-- Featured Row -->
     <section class="featured-row" aria-label="Featured games">
-      <article class="featured-card" id="featured-day" data-type="day" role="button" tabindex="0" aria-pressed="false">
-        <div class="thumb"></div>
-        <div class="meta">
-          <h3 class="title">Game of the Day</h3>
-          <p class="sub">Click to play</p>
+
+      <!-- Game of the Day -->
+      <article class="featured-card" id="featured-day" data-type="day" role="button" tabindex="0">
+        <div class="game-thumb">
+          <img src="thumbnails/day.jpg" alt="Game of the Day thumbnail">
+          <div class="game-overlay">
+            <div class="game-title">⭐ Game of the Day ⭐</div>
+          </div>
         </div>
       </article>
 
-      <article class="featured-card" id="featured-fav" data-type="favorite" role="button" tabindex="0" aria-pressed="false">
-        <div class="thumb"></div>
-        <div class="meta">
-          <h3 class="title">Owner's Favorite</h3>
-          <p class="sub">Click to play</p>
+      <!-- Owner's Favorite -->
+      <article class="featured-card" id="featured-fav" data-type="favorite" role="button" tabindex="0">
+        <div class="game-thumb">
+          <img src="thumbnails/fav.jpg" alt="Owner's Favorite thumbnail">
+          <div class="game-overlay">
+            <div class="game-title">👍 Owner’s Favorite 👍</div>
+          </div>
         </div>
       </article>
 
-      <article class="featured-card" id="featured-most" data-type="mostliked" role="button" tabindex="0" aria-pressed="false">
-        <div class="thumb"></div>
-        <div class="meta">
-          <h3 class="title">Most Liked</h3>
-          <p class="sub">Click to play</p>
+      <!-- Most Liked -->
+      <article class="featured-card" id="featured-most" data-type="mostliked" role="button" tabindex="0">
+        <div class="game-thumb">
+          <img src="thumbnails/most.jpg" alt="Most Liked Game thumbnail">
+          <div class="game-overlay">
+            <div class="game-title">🔥 Most Liked 🔥</div>
+          </div>
         </div>
       </article>
+
     </section>
 
-    <!-- GAMES GRID (optional additional grid) -->
+    <!-- Games Grid -->
     <section id="games-grid" class="games-grid" aria-label="All games"></section>
   </main>
 
-  <!-- MACOS-STYLE POPUP (hidden until active) -->
+  <!-- MacOS-Style Popup -->
   <div id="game-popup" class="popup" aria-hidden="true">
     <div class="popup-overlay" id="popup-overlay"></div>
-
     <div class="popup-window" role="dialog" aria-modal="true" aria-label="Game Player">
       <div class="popup-topbar">
-        <div class="mac-buttons" aria-hidden>
+        <div class="mac-buttons" aria-hidden="true">
           <span class="btn close"></span>
           <span class="btn minimize"></span>
           <span class="btn maximize"></span>
         </div>
         <button id="close-popup" class="close-x" aria-label="Close game">✕</button>
       </div>
-
       <div class="popup-body">
         <iframe id="game-iframe" src="" title="Game frame" allowfullscreen></iframe>
       </div>
     </div>
   </div>
 
-  <!-- main JS -->
+  <!-- JS -->
   <script src="js/main.js" defer></script>
 </body>
 </html>
