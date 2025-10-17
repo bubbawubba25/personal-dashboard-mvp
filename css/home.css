@@ -307,3 +307,52 @@ html,body { height:100%; margin:0; font-family: 'Poppins', system-ui, -apple-sys
 /* small accessibility/visual polish */
 [role="button"] { outline:none; }
 [role="button"]:focus { box-shadow: 0 0 0 4px rgba(0,170,255,0.12); border-radius: 12px; }
+/* ----- Hover Title Fade-In Centered Overlay ----- */
+.featured-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Overlay for the title on hover */
+.featured-card .meta {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: rgba(0, 0, 0, 0.45);
+  text-align: center;
+  backdrop-filter: blur(4px);
+  z-index: 5;
+}
+
+/* Title styling */
+.featured-card .meta .title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  margin: 0;
+}
+
+/* Optional subtitle (shows beneath the title) */
+.featured-card .meta .sub {
+  margin-top: 6px;
+  font-size: 14px;
+  opacity: 0.85;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Hover effect - fade the title in */
+.featured-card:hover .meta {
+  opacity: 1;
+}
+
+/* Keep the existing thumb scaling */
+.featured-card:hover .thumb {
+  transform: scale(1.06) translateY(-6px);
+}
+
