@@ -1,178 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🅶🆄🅱</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GUB — Home</title>
 
-<!-- Redirect if not authorized -->
-<script>
-  if (localStorage.getItem("authorized") !== "true") {
-    window.location.href = "login.html";
-  }
-</script>
+  <!-- main CSS -->
+  <link rel="stylesheet" href="css/home.css">
 
-<!-- Google tag -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4J4WLYMHLS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-4J4WLYMHLS');
-</script>
-
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-<!-- Favicon -->
-<link rel="icon" href="logo.PNG" type="image/png">
-
-<!-- Link to external CSS -->
-<link rel="stylesheet" href="style.css">
-
-<!-- Rotating title -->
-<script>
-  const titles = ["🅶🆄🅱","FREE","FUN","G@MES"];
-  let index = 0;
-  setInterval(() => {
-    document.title = titles[index];
-    index = (index + 1) % titles.length;
-  }, 2000);
-</script>
-
-<!-- REMOVE inline navbar CSS completely -->
+  <!-- favicon -->
+  <link rel="icon" href="images/logo.PNG" type="image/png">
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar">
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-  </ul>
+  <!-- LEFT ICON NAVBAR -->
+  <nav class="icon-nav" aria-label="Main navigation">
+    <ul>
+      <li class="nav-item active" title="Home" data-page="home"><svg aria-hidden viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 3.3L2 11v9a1 1 0 0 0 1 1h6v-7h6v7h6a1 1 0 0 0 1-1v-9L12 3.3z"/></svg></li>
+      <li class="nav-item" title="Games" data-page="games"><svg aria-hidden viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M21 8h-3.5L15 5H9L6.5 8H3v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8zM8 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm8 2h-5v2h5v-2z"/></svg></li>
+      <li class="nav-item" title="Profile" data-page="profile"><svg aria-hidden viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.5 0-8 2.2-8 4v2h16v-2c0-1.8-3.5-4-8-4z"/></svg></li>
+    </ul>
+  </nav>
 
-  <div class="nav-logo">
-    <img src="logo.PNG" alt="Logo">
+  <!-- AURORA / BACKGROUND (pure CSS) -->
+  <div class="bg-aurora" aria-hidden></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <header class="hero">
+      <img class="site-logo" src="images/logo.PNG" alt="GUB logo" />
+      <div class="search-wrap">
+        <input id="search" type="search" placeholder="Search games..." aria-label="Search games" />
+      </div>
+    </header>
+
+    <!-- FEATURED ROW (full width cards) -->
+    <section class="featured-row" aria-label="Featured games">
+      <article class="featured-card" id="featured-day" data-type="day" role="button" tabindex="0" aria-pressed="false">
+        <div class="thumb"></div>
+        <div class="meta">
+          <h3 class="title">Game of the Day</h3>
+          <p class="sub">Click to play</p>
+        </div>
+      </article>
+
+      <article class="featured-card" id="featured-fav" data-type="favorite" role="button" tabindex="0" aria-pressed="false">
+        <div class="thumb"></div>
+        <div class="meta">
+          <h3 class="title">Owner's Favorite</h3>
+          <p class="sub">Click to play</p>
+        </div>
+      </article>
+
+      <article class="featured-card" id="featured-most" data-type="mostliked" role="button" tabindex="0" aria-pressed="false">
+        <div class="thumb"></div>
+        <div class="meta">
+          <h3 class="title">Most Liked</h3>
+          <p class="sub">Click to play</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- GAMES GRID (optional additional grid) -->
+    <section id="games-grid" class="games-grid" aria-label="All games"></section>
+  </main>
+
+  <!-- MACOS-STYLE POPUP (hidden until active) -->
+  <div id="game-popup" class="popup" aria-hidden="true">
+    <div class="popup-overlay" id="popup-overlay"></div>
+
+    <div class="popup-window" role="dialog" aria-modal="true" aria-label="Game Player">
+      <div class="popup-topbar">
+        <div class="mac-buttons" aria-hidden>
+          <span class="btn close"></span>
+          <span class="btn minimize"></span>
+          <span class="btn maximize"></span>
+        </div>
+        <button id="close-popup" class="close-x" aria-label="Close game">✕</button>
+      </div>
+
+      <div class="popup-body">
+        <iframe id="game-iframe" src="" title="Game frame" allowfullscreen></iframe>
+      </div>
+    </div>
   </div>
 
-  <button class="aboutblank-btn" onclick="openAboutBlank()">About:Blank</button>
-</nav>
-
-<!-- Emoji background -->
-<div id="emoji-background"></div>
-
-<!-- Featured Games Section -->
-<div id="featured-section">
-  <div>
-    <div id="game-of-day" class="featured-card"></div>
-    <h2 class="featured-card-heading">⭐ Game of the Day ⭐</h2>
-  </div>
-  <div>
-    <div id="owners-favorite" class="featured-card"></div>
-    <h2 class="featured-card-heading">👍 Owner's Favorite 👍</h2>
-  </div>
-</div>
-
-<!-- Search bar -->
-<div id="search-container">
-  <input type="text" id="search-bar" placeholder="Search games...">
-</div>
-
-<!-- Game container -->
-<div id="game-container"></div>
-
-<script>
-// Emoji rain
-const emojiContainer = document.getElementById("emoji-background");
-function createEmoji() {
-  const emoji = document.createElement("div");
-  emoji.classList.add("emoji");
-  emoji.innerText = "🎮";
-  emoji.style.left = Math.random() * 100 + "vw";
-  emoji.style.animationDuration = (Math.random() * 3 + 2) + "s";
-  emojiContainer.appendChild(emoji);
-  setTimeout(() => emoji.remove(), 5000);
-}
-setInterval(createEmoji, 300);
-
-// Load games
-fetch('gxmes.json')
-  .then(res => res.json())
-  .then(games => {
-    const container = document.getElementById('game-container');
-
-    games.forEach((game) => {
-      const card = document.createElement('div');
-      card.className = 'game-card';
-      card.onclick = () => { window.location.href = game.file; };
-
-      const img = document.createElement('img');
-      img.src = game.thumbnail || 'thumbnails/thumbnail_default.jpg';
-
-      const overlay = document.createElement('div');
-      overlay.className = 'overlay';
-      overlay.innerText = game.name;
-
-      card.appendChild(img);
-      card.appendChild(overlay);
-      container.appendChild(card);
-    });
-
-    // Featured Section
-    const setFeaturedGames = () => {
-      const today = new Date();
-      const seed = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-      const index = Math.abs(seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0)) % games.length;
-      const gameOfDay = games[index];
-
-      const gameOfDayDiv = document.getElementById("game-of-day");
-      gameOfDayDiv.innerHTML = "";
-      const gdImg = document.createElement("img");
-      gdImg.src = gameOfDay.thumbnail || 'thumbnails/thumbnail_default.jpg';
-      const gdOverlay = document.createElement("div");
-      gdOverlay.className = "overlay";
-      gdOverlay.innerText = gameOfDay.name;
-      gameOfDayDiv.appendChild(gdImg);
-      gameOfDayDiv.appendChild(gdOverlay);
-      gameOfDayDiv.onclick = () => window.location.href = gameOfDay.file;
-
-      const favorite = games.find(g => g.favorite);
-      if(favorite){
-        const favDiv = document.getElementById("owners-favorite");
-        favDiv.innerHTML = "";
-        const favImg = document.createElement("img");
-        favImg.src = favorite.thumbnail || 'thumbnails/thumbnail_default.jpg';
-        const favOverlay = document.createElement("div");
-        favOverlay.className = "overlay";
-        favOverlay.innerText = favorite.name;
-        favDiv.appendChild(favImg);
-        favDiv.appendChild(favOverlay);
-        favDiv.onclick = () => window.location.href = favorite.file;
-      }
-    };
-
-    setFeaturedGames(games);
-  });
-
-  function openAboutBlank() {
-  const win = window.open("about:blank", "_blank");
-  win.document.write(`
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden;
-      }
-      iframe {
-        border: none;
-        width: 100%;
-        height: 100%;
-      }
-    </style>
-    <iframe src="${window.location.href}"></iframe>
-  `);
-}
-</script>
-
+  <!-- main JS -->
+  <script src="js/main.js" defer></script>
 </body>
 </html>
