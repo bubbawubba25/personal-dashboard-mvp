@@ -36,40 +36,38 @@
       </div>
     </header>
 
-    <!-- Featured Row -->
-    <section class="featured-row" aria-label="Featured games">
+  <!-- FEATURED ROW (full width cards) -->
+<section class="featured-row" aria-label="Featured games">
+  <!-- Game of the Day -->
+  <article class="featured-card" id="featured-day" data-type="day" role="button" tabindex="0" aria-pressed="false">
+    <div class="game-thumb">
+      <img src="" alt="Game of the Day Thumbnail" />
+      <div class="game-overlay">
+        <span class="game-title">Loading...</span>
+      </div>
+    </div>
+  </article>
 
-      <!-- Game of the Day -->
-      <article class="featured-card" id="featured-day" data-type="day" role="button" tabindex="0">
-        <div class="game-thumb">
-          <img src="thumbnails/day.jpg" alt="Game of the Day thumbnail">
-          <div class="game-overlay">
-            <div class="game-title">⭐ Game of the Day ⭐</div>
-          </div>
-        </div>
-      </article>
+  <!-- Owner's Favorite -->
+  <article class="featured-card" id="featured-fav" data-type="favorite" role="button" tabindex="0" aria-pressed="false">
+    <div class="game-thumb">
+      <img src="" alt="Owner's Favorite Thumbnail" />
+      <div class="game-overlay">
+        <span class="game-title">Loading...</span>
+      </div>
+    </div>
+  </article>
 
-      <!-- Owner's Favorite -->
-      <article class="featured-card" id="featured-fav" data-type="favorite" role="button" tabindex="0">
-        <div class="game-thumb">
-          <img src="thumbnails/fav.jpg" alt="Owner's Favorite thumbnail">
-          <div class="game-overlay">
-            <div class="game-title">👍 Owner’s Favorite 👍</div>
-          </div>
-        </div>
-      </article>
-
-      <!-- Most Liked -->
-      <article class="featured-card" id="featured-most" data-type="mostliked" role="button" tabindex="0">
-        <div class="game-thumb">
-          <img src="thumbnails/most.jpg" alt="Most Liked Game thumbnail">
-          <div class="game-overlay">
-            <div class="game-title">🔥 Most Liked 🔥</div>
-          </div>
-        </div>
-      </article>
-
-    </section>
+  <!-- Most Liked -->
+  <article class="featured-card" id="featured-most" data-type="mostliked" role="button" tabindex="0" aria-pressed="false">
+    <div class="game-thumb">
+      <img src="" alt="Most Liked Thumbnail" />
+      <div class="game-overlay">
+        <span class="game-title">Loading...</span>
+      </div>
+    </div>
+  </article>
+</section>
 
     <!-- Games Grid -->
     <section id="games-grid" class="games-grid" aria-label="All games"></section>
